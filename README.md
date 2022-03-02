@@ -7,7 +7,7 @@ pandoc README.md \
     --pdf-engine=xelatex -o 20220302_ZKFDM_Modul9_Konzept_Brilhaus.pdf
 -->
 
-# CEPLAS-ARCer &ndash; a simple, locally-deployed tool to find your peer's research data
+# CEPLAS-ARC-Finder &ndash; a simple, locally-deployed tool to find your peer's research data
 
 > Konzept für das Projektmodul (Modul 9) des Zertifikatskurs FDM (15.07) 2021 / 2020  
 > Teilnehmer: Dominik Brilhaus  
@@ -25,7 +25,14 @@ Although the ARC environment is continuously being developed, the choice of thes
 
 ## Approach
 
-This project focuses on metadata at the highest project and least sensitive (i.e. ISA's "investigation") level to minimize user input or possible discomfort with data sharing and will be achieved in four concerted, but independent modules of metadata (1) collection, (2) retrieval, (3) restructure and (4) representation. First, metadata is collected &ndash; manually or supported by automation &ndash; in the ISA investigation spread sheet, packaged in ARCs and submitted to the DataHUB by individual volunteers. Here, access to the ARCs can be controlled to share them publicly or with invited collaborators. The CEPLAS-ARCer selectively retrieves, downloads and dumps the metadata locally on the user's machine. The CEPLAS-ARCer restructures the metadata into a simple spreadsheet-based database from where it is finally read and represented by a user interface for data search and filtering.
+This project focuses on metadata at the highest project and least sensitive (i.e. ISA's "investigation") level to minimize user input or possible discomfort with data sharing and will be achieved in four concerted, but independent modules of metadata
+
+1. collection,
+1. retrieval,
+1. restructure, and
+1. representation.
+
+First, metadata is collected &ndash; manually or supported by automation &ndash; in the ISA investigation spread sheet, packaged in ARCs and submitted to the DataHUB by individual volunteers. Here, access to the ARCs can be controlled to share them publicly or with invited collaborators. The CEPLAS-ARC-Finder selectively retrieves, downloads and dumps the metadata locally on the user's machine. The CEPLAS-ARC-Finder then restructures the metadata into a simple spreadsheet-based database. From the database the investigation data is finally read and represented by a user interface that enables finding the data available to the individual user.
 
 <!-- Footnotes -->
 
