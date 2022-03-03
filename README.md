@@ -1,10 +1,15 @@
 
 <!-- 
+https://learnbyexample.github.io/customizing-pandoc/
+
+```
 pandoc README.md \
     -V linkcolor:blue \
     -V geometry:a4paper \
     -V geometry:margin=1.5cm \
-    --pdf-engine=xelatex -o 20220302_ZKFDM_Modul9_Konzept_Brilhaus.pdf
+    --pdf-engine=xelatex \ 
+    -o 20220302_ZKFDM_Modul9_Konzept_Brilhaus.pdf
+```
 -->
 
 # CEPLAS-ARC-Finder &ndash; a simple, locally-deployed tool to find your peer's research data

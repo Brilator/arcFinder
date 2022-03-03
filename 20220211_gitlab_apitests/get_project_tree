@@ -1,0 +1,44 @@
+[
+    {
+        "id": "32eef2cb0a6237e0da437a21683bc5db3f0583e3",
+        "name": ".arc",
+        "type": "tree",
+        "path": ".arc",
+        "mode": "040000"
+    },
+    {
+        "id": "f93e3a1a1525fb5b91020da86e44810c87a2d7bc",
+        "name": "assays",
+        "type": "tree",
+        "path": "assays",
+        "mode": "040000"
+    },
+    {
+        "id": "f93e3a1a1525fb5b91020da86e44810c87a2d7bc",
+        "name": "externals",
+        "type": "tree",
+        "path": "externals",
+        "mode": "040000"
+    },
+    {
+        "id": "f93e3a1a1525fb5b91020da86e44810c87a2d7bc",
+        "name": "runs",
+        "type": "tree",
+        "path": "runs",
+        "mode": "040000"
+    },
+    {
+        "id": "f93e3a1a1525fb5b91020da86e44810c87a2d7bc",
+        "name": "workflows",
+        "type": "tree",
+        "path": "workflows",
+        "mode": "040000"
+    },
+    {
+        "id": "9949f1b51f04dabbc88b3f9c93b21aa6677ecaa7",
+        "name": "README.md",
+        "type": "blob",
+        "path": "README.md",
+        "mode": "100644"
+    }
+]
