@@ -42,8 +42,37 @@ curl --request GET "https://git.nfdi4plants.org/api/v4/projects/" > list_public_
 ### list all accessible projects
 
 ```bash
---header "PRIVATE-TOKEN: $gitlab_token"
+curl --request GET --header "PRIVATE-TOKEN: $gitlab_token" "https://git.nfdi4plants.org/api/v4/projects/" > list_all_projects.json
 ```
+
+
+### Get a specific file
+
+Docs: https://docs.gitlab.com/ee/api/repository_files.html
+API call: `GET /projects/:id/repository/files/:file_path`
+
+cat get_project_tree.json
+
+- Id of the file `isa.investigation.xlsx` is `40636f8405bed6a4c29a5ac631870be02ed2e15d`
+
+```bash
+curl --request GET --header "PRIVATE-TOKEN: $gitlab_token" "https://git.nfdi4plants.org/api/v4/projects/33/repository/files/isa.investigation.xlsx?ref=main"
+
+curl --request GET --header "PRIVATE-TOKEN: $gitlab_token" "https://git.nfdi4plants.org/api/v4/projects/33/repository/files/40636f8405bed6a4c29a5ac631870be02ed2e15d?ref=main"
+```
+
+### get a specific raw file
+
+Docs: https://docs.gitlab.com/ee/api/repository_files.html#get-raw-file-from-repository
+API call: `GET /projects/:id/repository/files/:file_path/raw`
+
+```bash
+curl --request GET --header "PRIVATE-TOKEN: $gitlab_token" "https://git.nfdi4plants.org/api/v4/projects/33/repository/files/README.md/raw?ref=main" > project_readme_raw
+
+curl --request GET --header "PRIVATE-TOKEN: $gitlab_token" "https://git.nfdi4plants.org/api/v4/projects/33/repository/files/isa.investigation.xlsx/raw?ref=main" > project_isaInvestigation.xlsx
+```
+
+isa.investigation.xlsx
 
 
 
