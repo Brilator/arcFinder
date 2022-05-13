@@ -1,0 +1,16 @@
+
+
+
+```{r}
+require(XML)
+data <- xmlParse("../../02_retrieve_readFromGitLab/gitlab_apitests/project_isaInvestigation.xlsx_unzipped/xl/sharedStrings.xml")
+
+xml_data <- xmlToList(data, simplify = T)
+
+
+
+```
+
+
+
+

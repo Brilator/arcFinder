@@ -383,3 +383,5 @@ Temporary Items
 .apdisk
 
 gitlab_token
+.Rhistory
+*.RData

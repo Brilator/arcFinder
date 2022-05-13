@@ -25,6 +25,16 @@ gitlab_token=$(< gitlab_token)
 curl --header "PRIVATE-TOKEN: $gitlab_token" "https://git.nfdi4plants.org/api/v4/projects/52"
 ```
 
+### Can token be empty?
+
+```bash
+no_gitlab_token=""
+curl --header "PRIVATE-TOKEN: $no_gitlab_token" "https://git.nfdi4plants.org/api/v4/projects/33"
+curl --header "PRIVATE-TOKEN: $gitlab_token" "https://git.nfdi4plants.org/api/v4/projects/33"
+```
+
+GOOD!
+
 ### list repo tree
 
 ```bash
@@ -69,11 +79,12 @@ API call: `GET /projects/:id/repository/files/:file_path/raw`
 ```bash
 curl --request GET --header "PRIVATE-TOKEN: $gitlab_token" "https://git.nfdi4plants.org/api/v4/projects/33/repository/files/README.md/raw?ref=main" > project_readme_raw
 
+### public project
 curl --request GET --header "PRIVATE-TOKEN: $gitlab_token" "https://git.nfdi4plants.org/api/v4/projects/33/repository/files/isa.investigation.xlsx/raw?ref=main" > project_isaInvestigation.xlsx
+
+unzip project_isaInvestigation.xlsx -d project_isaInvestigation.xlsx_unzipped
+
 ```
-
-isa.investigation.xlsx
-
 
 
 
