@@ -34,8 +34,8 @@ fi
 ########################################################
 ### Run gitlab reader
 ########################################################
-
-bash 02_read_from_gitlab.sh -p $gitlab_pat 
+echo "log of 02_read_from_gitlab.sh" > .tmp02.log
+bash 02_read_from_gitlab.sh -p $gitlab_pat 2>&1 >> .tmp02.log
 
 ########################################################
 ### Run xlsx parser
@@ -46,13 +46,15 @@ bash 02_read_from_gitlab.sh -p $gitlab_pat
 ## - extract arc id from part of path
 ## - run script with arc id and path
 
+echo "log of 03_parse_isaInvxlsx.R" > .tmp03.log
+
 invs=$(find .tmp02_investigations/ -name '*.xlsx' | sort -n)
 echo "$invs" | while IFS= read -r current_inv_path;
 do 
   
   arc_id=$(echo $current_inv_path | cut -d/ -f3 | cut -d"_" -f1)  
   
-  Rscript 03_parse_isaInvxlsx.R "$arc_id" $current_inv_path 2>&1 > .tmp03.log
+  Rscript 03_parse_isaInvxlsx.R "$arc_id" $current_inv_path 2>&1 >> .tmp03.log
 
 done
 

@@ -96,7 +96,7 @@ do
     printf "Missing 'isa.investigation.xlsx' at the root of $arc_path\n"
     printf "\n$arc_id\t$arc_path\tisa.investigation.xlsx missing" >> .tmp02_investigations/arc_list.tsv
   else
-    curl --silent --request GET --header "PRIVATE-TOKEN: $gitlab_token" "https://git.nfdi4plants.org/api/v4/projects/$arc_id/repository/files/isa.investigation.xlsx/raw?ref=main" > .tmp02_investigations/$arc_id'_isa.inv.xlsx'
+    curl --silent --request GET --header "PRIVATE-TOKEN: $gitlab_token" "https://git.nfdi4plants.org/api/v4/projects/$arc_id/repository/files/isa.investigation.xlsx/raw?ref=main" -o .tmp02_investigations/$arc_id'_isa.inv.xlsx'
     printf "\n$arc_id\t$arc_path\tisa.investigation.xlsx detected" >> .tmp02_investigations/arc_list.tsv
   fi  
 

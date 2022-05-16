@@ -25,10 +25,12 @@ pandoc README.md \
 - [Caveats and places for future improvements](#caveats-and-places-for-future-improvements)
   - [isa.investigation.xlsx](#isainvestigationxlsx)
   - [branches](#branches)
+  - [efficiency](#efficiency)
 - [Dependencies](#dependencies)
   - [Software dependencies](#software-dependencies)
   - [Platform / access dependencies](#platform--access-dependencies)
 - [Checks and tests](#checks-and-tests)
+  - [TODO](#todo)
 - [User instructions](#user-instructions)
   - [gitlab token](#gitlab-token)
   - [Permissions](#permissions)
@@ -79,6 +81,14 @@ First, metadata is collected &ndash; manually or supported by automation &ndash;
 
 - reading only from default git branch `main` (not e.g. master or others)
 
+### efficiency
+
+- tool dumps, pulls freshly every time it is called
+  - nothing memorized and updated
+- selectivity
+  - not all ARCs, but just selection (e.g. group)
+  - error-prone: non-clean ARCs
+
 ## Dependencies
 
 ### Software dependencies
@@ -98,6 +108,11 @@ Currently tested only under the following constellation
 - bash and zsh
 - macOS Monterey 12.3.1, Platform: x86_64-apple-darwin17.0 (64-bit)
 - R version 4.2.0 (2022-04-22)
+
+### TODO 
+
+- ARCs in (sub)groups
+
 
 ## User instructions
 
