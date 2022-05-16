@@ -43,7 +43,6 @@ if (length(args)!=2) {
   isa_inv_wb <- args[2] 
   print(paste("Reading file", isa_inv_wb))
   arc_id <- args[1]
-  print(paste0("Storing outputs in: ", arc_id, ".Rdata"))
 }
 
 ########################
@@ -84,7 +83,7 @@ investigation_data <- invdata[grepl("^investigation",  invdata[, 1], ignore.case
 
 ### first column as row names
 rownames(investigation_data) <- investigation_data[,1]
-investigation_data2 <- investigation_data[,-1]
+investigation_data2 <- investigation_data[,-1, drop = F]
 
 ### extract investigation subsections (some redundancy with above)
 inv_sections <- which(grepl("^INVESTIGATION",  row.names(investigation_data2), ignore.case = F))
@@ -117,4 +116,8 @@ for(i in 1:length(inv_sections))
 ### output to .RData
 ########################
 
-save(investigation_list, isa_inv_wb, arc_id, file = paste0(arc_id, ".RData"))
+if(!dir.exists(".tmp03_rdata_dumps/")){dir.create(".tmp03_rdata_dumps/")}
+
+print(paste0("Storing outputs in: .tmp03_rdata_dumps/", arc_id, ".Rdata"))
+
+save(investigation_list, isa_inv_wb, arc_id, file = paste0(".tmp03_rdata_dumps/", arc_id, ".RData"))

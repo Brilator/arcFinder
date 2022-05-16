@@ -26,21 +26,21 @@ do
     esac
 done
 
-### Check if argument supplied with `-p` is a file.
-### If yes, read that file. 
-### If not, use the input (PAT as a string) directly
+# ### Check if argument supplied with `-p` is a file.
+# ### If yes, read that file. 
+# ### If not, use the input (PAT as a string) directly
 
-if [ -f "$gitlab_pat" ]; then
-    echo "Using GitLab token stored in '$gitlab_pat'."
-    gitlab_pat=$(< $gitlab_pat)
-else 
-    echo "Using supplied GitLab token"
-    # This would be gitlab_pat=$gitlab_pat   ### TODO: probably safer to change this 
-fi
+# if [ -f "$gitlab_pat" ]; then
+#     echo "Using GitLab token stored in '$gitlab_pat'."
+#     gitlab_pat=$(< $gitlab_pat)
+# else 
+#     echo "Using supplied GitLab token"
+#     # This would be gitlab_pat=$gitlab_pat   ### TODO: probably safer to change this 
+# fi
 
-### check if string is empty
+# ### check if string is empty
 
-[ -z "$gitlab_pat" ] && printf "No GitLab token supplied or GitLab token is empty. \nReading from public ARCs only.\n"
+# [ -z "$gitlab_pat" ] && printf "No GitLab token supplied or GitLab token is empty. \nReading from public ARCs only.\n"
 
 
 ############################

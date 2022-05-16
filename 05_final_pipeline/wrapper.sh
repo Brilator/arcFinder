@@ -1,25 +1,58 @@
 
 
 
-# 1. PAT input
+########################################################
+### Read GitLab personal access token (PAT)
+########################################################
 
-# 2. run gitlab reader
+### Read GitLab PAT from -p flag
 
-# 3. run xlsx parser
-
-## store paths into variable 
-find .tmp_investigations/ -name '*.xlsx'
-
-## while loop
-extract project id from first path
-
-
-invs=$(find .tmp_investigations/ -name '*.xlsx')
-echo "$invs" | while IFS= read -r current_inv;
-do 
-  echo $current_inv | cut -d/ -f3 | cut -d"_" -f1
-  echo $current_inv
-
+while getopts p: flag
+do
+    case "${flag}" in
+        p) gitlab_pat=${OPTARG};;
+    esac
 done
 
+### Check if argument supplied with `-p` is a file.
+### If yes, read that file. 
+### If not, use the input (PAT as a string) directly
+
+if [ -f "$gitlab_pat" ]; then
+    echo "Using GitLab token stored in '$gitlab_pat'."
+    gitlab_pat=$(< $gitlab_pat)
+else 
+    echo "Using supplied GitLab token"
+    # This would be gitlab_pat=$gitlab_pat   ### TODO: probably safer to change this 
+fi
+
+### check if string is empty
+
+[ -z "$gitlab_pat" ] && printf "No GitLab token supplied or GitLab token is empty. \nReading from public ARCs only.\n"
+
+
+########################################################
+### Run gitlab reader
+########################################################
+
+bash 02_read_from_gitlab.sh -p $gitlab_pat 
+
+########################################################
+### Run xlsx parser
+########################################################
+
+## store paths of isa.investigation.xlsx files into variable 
+## while loop
+## - extract arc id from part of path
+## - run script with arc id and path
+
+invs=$(find .tmp02_investigations/ -name '*.xlsx' | sort -n)
+echo "$invs" | while IFS= read -r current_inv_path;
+do 
+  
+  arc_id=$(echo $current_inv_path | cut -d/ -f3 | cut -d"_" -f1)  
+  
+  Rscript 03_parse_isaInvxlsx.R "$arc_id" $current_inv_path 2>&1 > .tmp03.log
+
+done
 
