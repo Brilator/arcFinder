@@ -385,3 +385,5 @@ Temporary Items
 gitlab_token
 .Rhistory
 *.RData
+.arcs*
+.tmp*
