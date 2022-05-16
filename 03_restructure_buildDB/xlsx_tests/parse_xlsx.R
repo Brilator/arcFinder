@@ -1,15 +1,19 @@
 
+############################################################
+### Script to read metadata from an isa.investigation.xlsx
+############################################################
+
 ## rough idea: 
 
-0. Check whether its an investigation sheet or loop over sheets
-1. focus on investigation only
-2. subset into sections?
-3. JSON-like
-  - column 1 = keys
-  - column(s) 2:n = values as a list
+# 0. Takes two arguments as CLI input: <ARC id> and <isa.investigation.xlsx>
+# 1. Check whether its an investigation sheet or loop over sheets
+# 2. focus on investigation only
+# 3. subset into investigation sections
+# 4. Store JSON-like as (nested) lists
+#   - column 1 = keys
+#   - column(s) 2:n = values as a list
+# 5. put out as RData for further processing
 
-
-```{r}
 
 ########################
 ### Setup
@@ -23,14 +27,24 @@ library(readxl)
 
 
 ########################
-### inputs
+### Inputs
 ########################
 
+args = commandArgs(trailingOnly=TRUE)
 
-#### excel workbook
-arc_id <- "test"
-isa_inv_wb <- "../../02_retrieve_readFromGitLab/gitlab_apitests/project_isaInvestigation.xlsx"
-
+# test if arguments are supplied: if not, return an error
+if (length(args)!=2) {
+  
+  stop("<ARC id> and <isa.investigation.xlsx> must be supplied as arguments", call.=FALSE)
+  
+  } else if (length(args)==2) {
+  
+  # default output file
+  isa_inv_wb <- args[2] 
+  print(paste("Reading file", isa_inv_wb))
+  arc_id <- args[1]
+  print(paste0("Storing outputs in: ", arc_id, ".Rdata"))
+}
 
 ########################
 ### read data from excel
@@ -99,15 +113,8 @@ for(i in 1:length(inv_sections))
   
 }
 
-
 ########################
 ### output to .RData
 ########################
 
 save(investigation_list, isa_inv_wb, arc_id, file = paste0(arc_id, ".RData"))
-
-```
-
-
-
-
