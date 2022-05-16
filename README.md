@@ -24,12 +24,14 @@ pandoc README.md \
 - [Approach](#approach)
 - [Caveats and places for future improvements](#caveats-and-places-for-future-improvements)
   - [isa.investigation.xlsx](#isainvestigationxlsx)
+  - [branches](#branches)
 - [Dependencies](#dependencies)
   - [Software dependencies](#software-dependencies)
   - [Platform / access dependencies](#platform--access-dependencies)
 - [Checks and tests](#checks-and-tests)
 - [User instructions](#user-instructions)
   - [gitlab token](#gitlab-token)
+  - [Permissions](#permissions)
 
 ## Motivation
 
@@ -73,6 +75,10 @@ First, metadata is collected &ndash; manually or supported by automation &ndash;
 - xlsx can become big and needs to be dumped
 - json could be read on-the-fly
 
+### branches
+
+- reading only from default git branch `main` (not e.g. master or others)
+
 ## Dependencies
 
 ### Software dependencies
@@ -93,13 +99,16 @@ Currently tested only under the following constellation
 - macOS Monterey 12.3.1, Platform: x86_64-apple-darwin17.0 (64-bit)
 - R version 4.2.0 (2022-04-22)
 
-
-
 ## User instructions
 
-### gitlab token 
+### gitlab token
 
 1. Generate a personal access token (PAT) at DataHUB
 2. Two options to use the PAT
    - store the PAT in a file and use this in the script XXX  {### TODO}
-   - directly paste the token as argument to script XXX 
+   - directly paste the token as argument to script XXX
+3. Supplying a "wrong token" (i.e. any non-sense string) currently breaks the script.
+
+### Permissions
+
+- make all bash scripts executable?
