@@ -24,6 +24,10 @@ pandoc README.md \
 - [Approach](#approach)
 - [Caveats and places for future improvements](#caveats-and-places-for-future-improvements)
   - [isa.investigation.xlsx](#isainvestigationxlsx)
+- [Dependencies](#dependencies)
+  - [Software dependencies](#software-dependencies)
+  - [Platform / access dependencies](#platform--access-dependencies)
+- [Checks and tests](#checks-and-tests)
 
 ## Motivation
 
@@ -66,3 +70,24 @@ First, metadata is collected &ndash; manually or supported by automation &ndash;
 - direct user-input to isa.investigation.xlsx can be read immediately
 - xlsx can become big and needs to be dumped
 - json could be read on-the-fly
+
+## Dependencies
+
+### Software dependencies
+
+script name | Environment | Package
+---------|----------|---------
+03_parse_isaInvxlsx.R | R | readxl_1.4.0
+
+### Platform / access dependencies
+
+1. [^DataHUB] gitlab access token -> to retrieve data from non-public ARCs
+
+## Checks and tests
+
+Currently tested only under the following constellation
+
+- bash and zsh
+- macOS Monterey 12.3.1, Platform: x86_64-apple-darwin17.0 (64-bit)
+- R version 4.2.0 (2022-04-22)
+
