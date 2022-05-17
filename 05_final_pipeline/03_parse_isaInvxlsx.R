@@ -101,15 +101,20 @@ for(i in 1:length(inv_sections))
   
   current_section <- investigation_data2[section_range, ]
   
+  ### remove columns that are only NA
+  current_section <- current_section[, apply(current_section, 2, function(x){sum(is.na(x)) != nrow(current_section)}), drop = F]
+  
   ### transpose / pivot data to transform into list
   current_section_transposed <- as.data.frame(t(current_section))
   
   ### extract current section name
   current_section_name <- row.names(investigation_data2)[inv_sections[i]]
   
-  ### transform to named list, omitting NAs
-  investigation_list[[current_section_name]] <- lapply(current_section_transposed, function(v){v[!is.na(v)]})
-  
+  # ### transform to named list, omitting NAs
+  # investigation_list[[current_section_name]] <- lapply(current_section_transposed, function(v){v[!is.na(v)]})
+  # 
+  # stack(current_section_transposed)
+   
 }
 
 ########################
