@@ -106,6 +106,9 @@ for(i in 1:length(inv_sections))
   
   ### transpose / pivot data to transform into list
   current_section_transposed <- as.data.frame(t(current_section))
+  rownames(current_section_transposed) <- NULL
+  
+  current_section_transposed$arc_id <- arc_id
   
   ### extract current section name
   current_section_name <- row.names(investigation_data2)[inv_sections[i]]
@@ -114,7 +117,9 @@ for(i in 1:length(inv_sections))
   # investigation_list[[current_section_name]] <- lapply(current_section_transposed, function(v){v[!is.na(v)]})
   # 
   # stack(current_section_transposed)
-   
+  
+  investigation_list[[current_section_name]] <- current_section_transposed
+  
 }
 
 ########################

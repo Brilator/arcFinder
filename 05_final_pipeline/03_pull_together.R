@@ -8,11 +8,56 @@ for(i in dir(".tmp03_rdata_dumps/", full.names = T))
 {
   
   load(i)
+  investigation_list$INVESTIGATION
+  
   all_arcs[[arc_id]] <- investigation_list
     
 }
 
 save(all_arcs, file = ".tmp03_allARCs.RData")
+
+
+
+all_arcs$`16`$INVESTIGATION
+
+
+### rowbind by investigation section
+library(tidyverse)
+all_arcs_unlisted <- unlist(all_arcs, recursive = F)
+test <- flatten(all_arcs)
+
+
+do.call(function(x){rbind(unlist(x, recursive = F))}, all_arcs)
+
+all_arcs_df <- lapply(all_arcs, rbind.data.frame)
+
+
+names(unlist(all_arcs, recursive = F))
+
+cols <- unique(unlist(lapply(all_arcs, names)))
+
+another_test <- map(all_arcs, `[`, cols) %>% map(bind_rows)
+
+
+lapply(all_arcs, names)
+
+do.call(intersect, lapply(all_arcs, names))
+
+intersect(names(all_arcs$`16`), names(all_arcs$`33`))
+
+
+
+# library(purrr)
+# lapply(transpose(all_arcs), function(x) do.call(rbind, x))
+
+
+do.call(Map, c(f = rbind, all_arcs))
+
+
+all_arcs$`77`$`INVESTIGATION CONTACTS`
+
+all_arcs_unlisted
+
 
 
 if(!require("jsonlite", quietly = TRUE)){install.packages("jsonlite")}
