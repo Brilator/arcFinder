@@ -34,6 +34,7 @@ pandoc README.md \
 - [User instructions](#user-instructions)
   - [gitlab token](#gitlab-token)
   - [Permissions](#permissions)
+- [Lessons learned](#lessons-learned)
 
 ## Motivation
 
@@ -109,10 +110,9 @@ Currently tested only under the following constellation
 - macOS Monterey 12.3.1, Platform: x86_64-apple-darwin17.0 (64-bit)
 - R version 4.2.0 (2022-04-22)
 
-### TODO 
+### TODO
 
 - ARCs in (sub)groups
-
 
 ## User instructions
 
@@ -127,3 +127,11 @@ Currently tested only under the following constellation
 ### Permissions
 
 - make all bash scripts executable?
+
+## Lessons learned
+
+- first time really making use of an API
+- first time thinking about
+  - dependencies
+  - where to put what
+  - logs

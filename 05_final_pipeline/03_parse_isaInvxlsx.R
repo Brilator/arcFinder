@@ -70,7 +70,7 @@ for(sheet in excel_sheets(isa_inv_wb)){
 }
 
 ### Stop if no proper ISA sheet detected
-if(is.null(invdata)){stop(simpleError("No valid ISA ingestigation sheet detected"))}
+if(is.null(invdata)){stop(simpleError("No valid ISA investigation sheet detected"))}
 
 
 ########################
