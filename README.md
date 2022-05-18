@@ -86,6 +86,7 @@ First, metadata is collected &ndash; manually or supported by automation &ndash;
 
 - tool dumps, pulls freshly every time it is called
   - nothing memorized and updated
+  - by design sqlite db is always overwritten -> data could be appended
 - selectivity
   - not all ARCs, but just selection (e.g. group)
   - error-prone: non-clean ARCs

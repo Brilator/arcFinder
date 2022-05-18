@@ -1,0 +1,93 @@
+---
+title: "Untitled"
+author: "Dominik"
+date: '2022-05-18'
+output: html_document
+runtime: shiny
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+library(tidyverse)
+library(shiny)
+
+a_df <- tibble(
+     var_one = c("hadley", "charlotte", "rené", "raymond"),
+     var_two = c("mutate", "filter", "slice", "spread"),
+     var_three = c("an apple", "a pipe", "a cocktail", "a dog"),
+     var_four = c("with", "without", "thanks", "out of"),
+     var_five = c("tidyr", "magrittr", "purrr", "dplyr")
+     )
+
+ex_df <- expand.grid(a_df) # create a df with the 64 combinaisons
+
+tib <- as_tibble(sample_n(ex_df, 40))
+
+```
+
+
+```{r}
+shinyApp(
+  ui = pageWithSidebar(
+        headerPanel("Painting 6"),
+        sidebarPanel(
+          uiOutput("select_var1"),
+          uiOutput("select_var2")
+          ),
+
+    mainPanel(
+      tableOutput("table")
+  )
+),
+
+ server = function(input, output, session) {
+   
+    tab <- reactive({ 
+         
+         tib %>% 
+         filter(var_one == input$var1)
+           
+    })
+   
+    output$select_var1 <- renderUI({
+  
+    selectizeInput('var1', 'Select variable 1', choices = c("select" = "", levels(tib$var_one)))
+  
+    })
+    
+    output$select_var2 <- renderUI({
+      
+      
+      choice_var2 <- reactive({
+      tib %>% 
+      filter(var_one == input$var1) %>% 
+      pull(var_two) %>% 
+      as.character()
+        
+      })
+      
+    selectizeInput('var2', 'Select variable 2', choices = c("select" = "", choice_var2())) # <- put the reactive element here
+  
+    })
+    
+
+    
+    output$table <- renderTable({ 
+       
+       tab()
+      
+    })
+    
+ },
+
+options = list(height = 500)
+
+)
+
+
+
+```
+

@@ -35,24 +35,20 @@ colnames(arc_list)[1] <- "arc_id"
 
 all_arcs_db[["arc_list"]] <- arc_list
 
-
-# ### store the output
-# 
-# save(all_arcs_db, file = ".tmp03_allARCs.RData")
-# load(file = ".tmp03_allARCs.RData")
-
-
+### store the output as RData
+ 
+save(all_arcs_db, file = ".tmp03_allARCs.RData")
 
 ### Write into an SQLite DB file
 
 mydb <- dbConnect(RSQLite::SQLite(), "tmp03_allARCs.sqlite")
-dbDisconnect(mydb)
 
-dbWriteTable(mydb, "INVESTIGATION", all_arcs_db$INVESTIGATION)
-dbWriteTable(mydb, "arc_list", all_arcs_db$arc_list)
+for(i in names(all_arcs_db))
+{
+  dbWriteTable(mydb, i, all_arcs_db[[i]], overwrite = T)
+}
 
 dbListTables(mydb)
-
 dbDisconnect(mydb)
 
 

@@ -1,0 +1,104 @@
+
+
+
+```{r}
+library(tidyverse)
+library(shiny)
+
+load("../05_final_pipeline/.tmp03_allARCs.RData")
+
+### Flatten ALL values into a 3-column (arc_id | key | value) df to provide search across "any field"
+
+all_values <- do.call(
+  rbind.data.frame, lapply(all_arcs_db, function(x){
+  pivot_longer(x, cols = setdiff(colnames(x), "arc_id"), values_drop_na = T)}))
+
+# data.frame(unlist(lapply(all_arcs_db, colnames)))
+
+### Flatten all keys into a 2-column (key | list) df to use as search field selection
+
+all_keys <- list()
+for(i in names(all_arcs_db)){
+  all_keys[[i]] <- data.frame(keys = names(all_arcs_db[[i]]), list = i)
+}
+
+all_keys <- do.call(rbind.data.frame, all_keys)
+all_keys_cleaned <- subset(all_keys, keys != "arc_id")
+
+
+
+
+shinyApp(
+  ui = pageWithSidebar(
+        # headerPanel("Painting 1"),
+        sidebarPanel(
+          selectizeInput('search_key', 'Select a field', choices = c("choose" = "", all_keys_cleaned$keys)) 
+          ),
+
+    mainPanel(
+      tableOutput("table")
+  )
+),
+
+ server = function(input, output, session) {
+   
+    output$table <- renderTable({ 
+       
+      head(tib, 10)
+      
+      # list_to_search <- all_keys_cleaned[all_keys_cleaned$keys == input$search_key, "list"]
+      
+      # all_arcs_db[[list_to_search]]
+       
+    })
+   
+ },
+
+options = list(height = 500)
+
+)
+
+
+
+shinyApp(
+    ui = pageWithSidebar(
+        headerPanel("CEPLAS-ARC Finder"),
+        sidebarPanel(
+            selectizeInput('search_key', 'Select a field', choices = c("choose" = "", all_keys_cleaned$keys)),
+            uiOutput("select_var1")
+        ),
+        
+        mainPanel(
+            tableOutput("table")
+        )
+    ),
+    
+    server = function(input, output, session) {
+        
+        tab <- reactive({ 
+          
+          list_to_search <- all_keys_cleaned[all_keys_cleaned$keys == input$search_key, "list"]
+      
+          all_arcs_db[[list_to_search]]
+
+            
+        })
+        
+        output$table <- renderTable({ 
+            
+            tab()
+            
+        })
+        
+    },
+    
+    options = list(height = 500)
+    
+)
+
+
+
+
+
+```
+
