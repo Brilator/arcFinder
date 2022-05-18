@@ -26,46 +26,107 @@ all_keys <- do.call(rbind.data.frame, all_keys)
 all_keys_cleaned <- subset(all_keys, keys != "arc_id")
 
 
+# 
+# 
+# shinyApp(
+#   ui = pageWithSidebar(
+#         # headerPanel("Painting 1"),
+#         sidebarPanel(
+#           selectizeInput('search_key', 'Select a field', choices = c("choose" = "", all_keys_cleaned$keys)) 
+#           ),
+# 
+#     mainPanel(
+#       tableOutput("table")
+#   )
+# ),
+# 
+#  server = function(input, output, session) {
+#    
+#     output$table <- renderTable({ 
+#        
+#       head(tib, 10)
+#       
+#       # list_to_search <- all_keys_cleaned[all_keys_cleaned$keys == input$search_key, "list"]
+#       
+#       # all_arcs_db[[list_to_search]]
+#        
+#     })
+#    
+#  },
+# 
+# options = list(height = 500)
+# 
+# )
 
-
-shinyApp(
-  ui = pageWithSidebar(
-        # headerPanel("Painting 1"),
-        sidebarPanel(
-          selectizeInput('search_key', 'Select a field', choices = c("choose" = "", all_keys_cleaned$keys)) 
-          ),
-
-    mainPanel(
-      tableOutput("table")
-  )
-),
-
- server = function(input, output, session) {
-   
-    output$table <- renderTable({ 
-       
-      head(tib, 10)
-      
-      # list_to_search <- all_keys_cleaned[all_keys_cleaned$keys == input$search_key, "list"]
-      
-      # all_arcs_db[[list_to_search]]
-       
-    })
-   
- },
-
-options = list(height = 500)
-
-)
-
+# 
+# 
+# shinyApp(
+#     ui = pageWithSidebar(
+#         headerPanel("CEPLAS-ARC Finder"),
+#         sidebarPanel(
+#             selectizeInput('search_key', 'Select a field', choices = c("choose" = "", all_keys_cleaned$keys)),
+#             uiOutput("select_var1")
+#         ),
+#         
+#         mainPanel(
+#             tableOutput("table")
+#         )
+#     ),
+#     
+#     server = function(input, output, session) {
+#         
+#       
+#       ##### reactive table output
+#       
+#         tab <- reactive({ 
+#           
+#           list_to_search <- all_keys_cleaned[all_keys_cleaned$keys == input$search_key, "list"]
+#       
+#           all_arcs_db[[list_to_search]]
+#             
+#         })
+#       
+#       
+#       ##### reactive input field for text-search
+#           
+#         
+#       output$select_var2 <- renderUI({
+#       
+#       
+#       choice_var2 <- reactive({
+#       tib %>% 
+#       filter(var_one == input$var1) %>% 
+#       pull(var_two) %>% 
+#       as.character()
+#         
+#       })
+#       
+#     selectizeInput('var2', 'Select variable 2', choices = c("select" = "", choice_var2())) # <- put the reactive element here
+#   
+#     })
+#         
+#         
+#       ##### render output table
+#         
+#         output$table <- renderTable({ 
+#             
+#             tab()
+#             
+#         })
+#         
+#     },
+#     
+#     options = list(height = 500)
+#     
+# )
 
 
 shinyApp(
     ui = pageWithSidebar(
         headerPanel("CEPLAS-ARC Finder"),
         sidebarPanel(
-            selectizeInput('search_key', 'Select a field', choices = c("choose" = "", all_keys_cleaned$keys)),
-            uiOutput("select_var1")
+            selectizeInput('search_key', 'Select a field to search', choices = c("choose" = "", unique(all_values$name))),
+            uiOutput("select_var2")
         ),
         
         mainPanel(
@@ -75,14 +136,39 @@ shinyApp(
     
     server = function(input, output, session) {
         
+      
+      ##### reactive table output
+      
         tab <- reactive({ 
           
-          list_to_search <- all_keys_cleaned[all_keys_cleaned$keys == input$search_key, "list"]
-      
-          all_arcs_db[[list_to_search]]
-
+          # subset(all_values, name == input$search_key)
+          subset(all_values, name == input$search_key & value == input$var2)
             
         })
+      
+      
+      ##### reactive input field for text-search
+          
+        
+      output$select_var2 <- renderUI({
+      
+      
+      choice_var2 <- reactive({
+        
+      # all_values %>% 
+      #   filter(name == input$search_key)
+        
+        unique(subset(all_values, name == input$search_key, "value", drop = T))
+        
+        
+      })
+      
+      selectizeInput('var2', 'Search the DB', choices = c("select" = "", choice_var2())) # <- put the reactive element here
+      
+      })
+        
+        
+      ##### render output table
         
         output$table <- renderTable({ 
             
@@ -95,9 +181,6 @@ shinyApp(
     options = list(height = 500)
     
 )
-
-
-
 
 
 ```
