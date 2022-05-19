@@ -99,7 +99,7 @@ for(i in 1:length(inv_sections))
     section_range <- (inv_sections[i] + 1):(inv_sections[i+1] - 1)  
     }
   
-  current_section <- investigation_data2[section_range, ]
+  current_section <- investigation_data2[section_range, , drop =F]
   
   ### remove columns that are only NA
   current_section <- current_section[, apply(current_section, 2, function(x){sum(is.na(x)) != nrow(current_section)}), drop = F]
@@ -107,6 +107,9 @@ for(i in 1:length(inv_sections))
   ### transpose / pivot data to transform into list
   current_section_transposed <- as.data.frame(t(current_section))
   rownames(current_section_transposed) <- NULL
+  
+  # TODO stupid work-around to circumvent the bug with a section having only NAs
+  if(nrow(current_section_transposed) == 0){current_section_transposed[1, ] = NA}
   
   current_section_transposed$arc_id <- arc_id
   
