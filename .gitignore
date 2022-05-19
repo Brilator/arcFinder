@@ -387,3 +387,4 @@ gitlab_token
 *.RData
 .arcs*
 .tmp*
+05_final_pipeline/05_allARCs_database.sqlite

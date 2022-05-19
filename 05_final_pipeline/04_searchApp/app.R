@@ -1,7 +1,7 @@
 
 
-library(tidyverse)
-library(shiny)
+suppressMessages(library(tidyverse))
+suppressMessages(library(shiny))
 
 load("../.tmp03_allARCs.RData")
 
@@ -17,7 +17,7 @@ arc_list <- unique(arc_list)
 
 shinyApp(
     ui = pageWithSidebar(
-        headerPanel("CEPLAS-ARC Finder"),
+        headerPanel("ARC Finder"),
         sidebarPanel(
             selectizeInput('search_key', 'Select a field to search', choices = c("Any field", unique(all_values$name))),
             uiOutput("search_field"), 

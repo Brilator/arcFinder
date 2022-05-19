@@ -35,6 +35,11 @@ fi
 ########################################################
 ### Run gitlab reader
 ########################################################
+
+echo "----------------------"
+echo "### Step 01: Downloading metadata of available ARCs from the DataHUB."
+echo "----------------------"
+
 echo "log of 02_read_from_gitlab.sh" > .tmp02.log
 bash 02_read_from_gitlab.sh -p "${gitlab_pat}" 2>&1 >> .tmp02.log
 
@@ -47,6 +52,8 @@ bash 02_read_from_gitlab.sh -p "${gitlab_pat}" 2>&1 >> .tmp02.log
 ## - extract arc id from part of path
 ## - run script with arc id and path
 
+echo "### Step 02: Structuring ARC metadata."
+echo "----------------------"
 echo "log of 03_parse_isaInvxlsx.R" > .tmp03.log
 
 invs=$(find .tmp02_investigations/ -name '*.xlsx' | sort -n)
@@ -61,21 +68,25 @@ done
 
 
 ########################################################
-### Run xlsx parser
+### Pull together data
 ########################################################
+
+echo "### Step 03: Building a searchable database of ARC metadata"
+echo "----------------------"
 
 Rscript 03_pull_together.R 2>&1 >> .tmp03.log
-
-
-########################################################
-### Run the search APP
-########################################################
-
-Rscript -e 'shiny::runApp("04_searchApp/", launch.browser = TRUE)'
-
 
 ########################################################
 ### Optional: Prepare SQLite database
 ########################################################
 
 Rscript 05_pull_together_sql.R 2>&1 >> .tmp05.log
+
+########################################################
+### Run the search APP
+########################################################
+
+echo "### Voila: The ARC Finder is running in your default browser."
+echo "### Close the browser window or tab to shut down the app."
+
+Rscript -e 'shiny::runApp("04_searchApp/", launch.browser = TRUE)' 2>&1 >> .tmp04.log
