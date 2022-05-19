@@ -91,7 +91,7 @@ shinyApp(
           
         
         observe({
-          updateSelectInput(session = session, inputId = "arc_path", choices = c("", arc_choices_path()))
+          updateSelectInput(session = session, inputId = "arc_path", choices = arc_choices_path())
           })
         
         
@@ -109,6 +109,7 @@ shinyApp(
         output$table_INV <- renderTable(colnames = F, rownames = F, {
           
           selected_table <- selected_arc()$INVESTIGATION
+          selected_table <- selected_table[, -which(colnames(selected_table) == "arc_id")]
           
           selected_table$pivot_col <- row.names(selected_table)
           long <- pivot_longer(selected_table, setdiff(colnames(selected_table), "pivot_col"), values_drop_na = T)
@@ -122,7 +123,8 @@ shinyApp(
         output$table_INV_PUBS <- renderTable(colnames = F, rownames = F, {
           
           selected_table <- selected_arc()$`INVESTIGATION PUBLICATIONS`
-
+          selected_table <- selected_table[, -which(colnames(selected_table) == "arc_id")]
+          
           selected_table$pivot_col <- row.names(selected_table)
           long <- pivot_longer(selected_table, setdiff(colnames(selected_table), "pivot_col"), values_drop_na = T)
           
@@ -137,6 +139,7 @@ shinyApp(
           
           
           selected_table <- selected_arc()$`INVESTIGATION CONTACTS`
+          selected_table <- selected_table[, -which(colnames(selected_table) == "arc_id")]
 
           selected_table$pivot_col <- row.names(selected_table)
           long <- pivot_longer(selected_table, setdiff(colnames(selected_table), "pivot_col"), values_drop_na = T)
