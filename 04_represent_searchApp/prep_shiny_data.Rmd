@@ -33,7 +33,7 @@ shinyApp(
     ui = pageWithSidebar(
         headerPanel("CEPLAS-ARC Finder"),
         sidebarPanel(
-            selectizeInput('search_key', 'Select a field to search', choices = c("choose" = "", unique(all_values$name))),
+            selectizeInput('search_key', 'Select a field to search', choices = c("Any field", unique(all_values$name))),
             uiOutput("search_field")
         ),
         
@@ -49,14 +49,17 @@ shinyApp(
           
         
       output$search_field <- renderUI({
-      
-      value_choice <- reactive({
         
-        unique(subset(all_values, name == input$search_key, "value", drop = T))
+        # check whether user wants to filter by cyl;
+        # if not, then filter by selection
+        if ('Any field' %in% input$search_key) {
+            df <- all_values
+        } else {
+            df <- subset(all_values, name == input$search_key)
+        }
         
-      })
       
-      selectizeInput('search_value', 'Search the DB', choices = c(value_choice())) 
+      selectizeInput('search_value', 'Search the DB', choices = sort(unique(df$value))) 
       
       })
       
@@ -64,8 +67,13 @@ shinyApp(
       
         tab <- reactive({ 
           
-          subset(all_values, name == input$search_key & value == input$search_value)
-            
+        if ('Any field' %in% input$search_key) {
+            subset(all_values, value == input$search_value)
+            } else {
+            subset(all_values, name == input$search_key & value == input$search_value)
+        }
+          
+          
         })
       
         
