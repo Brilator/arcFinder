@@ -1,5 +1,11 @@
+########################################################
+### Pull together data
+########################################################
 
+echo "### Installing dependencies"
+echo "----------------------"
 
+Rscript 01_install_dependencies.R 2>&1 >> .tmp01.log
 
 ########################################################
 ### Read GitLab personal access token (PAT)

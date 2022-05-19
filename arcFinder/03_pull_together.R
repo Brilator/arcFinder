@@ -19,9 +19,6 @@ for(i in dir(".tmp03_rdata_dumps/", full.names = T, pattern = ".RData"))
 
 ### row-bind the second-level (i.e. INVESTIGATION "sections") of the lists, respectively
 
-# library(purrr)
-# all_arcs_db <- lapply(transpose(all_arcs), function(x) do.call(rbind, x))
-
 all_arcs_db <- do.call(Map, c(f = rbind, all_arcs))
 
 ### read the arc_list (translating the ARC id to the ARC path) produced by 02_read_from_gitlab.sh
