@@ -20,7 +20,8 @@ done
 
 if [ -f "$gitlab_pat" ]; then
     echo "Using GitLab token stored in '$gitlab_pat'."
-    gitlab_pat=$(< $gitlab_pat)
+    gitlab_pat=$(< gitlab_token)
+    # gitlab_pat=$(< $gitlab_pat)
 else 
     echo "Using supplied GitLab token"
     # This would be gitlab_pat=$gitlab_pat   ### TODO: probably safer to change this 
@@ -35,7 +36,7 @@ fi
 ### Run gitlab reader
 ########################################################
 echo "log of 02_read_from_gitlab.sh" > .tmp02.log
-bash 02_read_from_gitlab.sh -p $gitlab_pat 2>&1 >> .tmp02.log
+bash 02_read_from_gitlab.sh -p "${gitlab_pat}" 2>&1 >> .tmp02.log
 
 ########################################################
 ### Run xlsx parser
@@ -64,3 +65,10 @@ done
 ########################################################
 
 Rscript 03_pull_together.R 2>&1 >> .tmp03.log
+
+
+########################################################
+### Run the search APP
+########################################################
+
+Rscript -e 'shiny::runApp("04_searchApp/", launch.browser = TRUE)'
