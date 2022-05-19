@@ -23,6 +23,7 @@ shinyApp(
             uiOutput("search_field"), 
             selectInput(inputId = "arc_path", label = "Select an ARC for details", choices = NULL),
             br(),
+            actionButton("go", "Show this ARC"),
             h3("Access this ARC in the DataHUB"),
             uiOutput("arc_gitlab"),
              
@@ -57,7 +58,7 @@ shinyApp(
         }
         
       
-      selectizeInput('search_value', 'Search the DB', choices = sort(unique(df$value))) 
+      selectizeInput('search_value', 'Search the ARC database', choices = c("", sort(unique(df$value))))
       
       })
       
@@ -90,13 +91,13 @@ shinyApp(
           
         
         observe({
-          updateSelectInput(session = session, inputId = "arc_path", choices = arc_choices_path())
+          updateSelectInput(session = session, inputId = "arc_path", choices = c("", arc_choices_path()))
           })
         
         
      #### User's ARC choice 
         
-        selected_arc <- reactive({
+        selected_arc <- eventReactive(input$go, {
         
         all_arcs[[as.character(subset(arc_list, ARC.path %in% input$arc_path, arc_id, drop = T))]]
       
@@ -149,6 +150,10 @@ shinyApp(
         output$arc_gitlab <- renderUI(a(href = paste0('https://git.nfdi4plants.org/', input$arc_path), 
                                         paste0('https://git.nfdi4plants.org/', input$arc_path) ,target="_blank"))
         
+        
+        session$onSessionEnded(function() {
+          stopApp()
+        })
     }
     
 )
