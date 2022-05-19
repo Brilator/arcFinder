@@ -2,10 +2,10 @@
 ### Pull together data
 ########################################################
 
-echo "### Installing dependencies"
+echo "### Restore virtual environment"
 echo "----------------------"
 
-Rscript 01_install_dependencies.R 2>&1 >> .tmp01.log
+Rscript 01_restore_dependencies.R 2>&1 >> .tmp01.log
 
 ########################################################
 ### Read GitLab personal access token (PAT)
