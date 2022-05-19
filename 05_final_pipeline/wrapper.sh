@@ -72,3 +72,10 @@ Rscript 03_pull_together.R 2>&1 >> .tmp03.log
 ########################################################
 
 Rscript -e 'shiny::runApp("04_searchApp/", launch.browser = TRUE)'
+
+
+########################################################
+### Optional: Prepare SQLite database
+########################################################
+
+Rscript 05_pull_together_sql.R 2>&1 >> .tmp05.log

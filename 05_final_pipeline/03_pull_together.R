@@ -2,9 +2,6 @@
 ### Script to pull together output of previous scripts
 ############################################################
 
-if(!require("DBI", quietly = TRUE)){install.packages("DBI")}
-library(DBI)
-
 ### for loop over available RData dumps from 03_parse_isaInvxlsx.R
 
 all_arcs <- list()
