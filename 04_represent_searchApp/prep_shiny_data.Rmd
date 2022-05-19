@@ -13,6 +13,9 @@ all_values <- do.call(
   rbind.data.frame, lapply(all_arcs_db, function(x){
   pivot_longer(x, cols = setdiff(colnames(x), "arc_id"), values_drop_na = T)}))
 
+all_values <- as.data.frame(all_values)
+
+
 # data.frame(unlist(lapply(all_arcs_db, colnames)))
 # 
 # ### Flatten all keys into a 2-column (key | list) df to use as search field selection
@@ -40,15 +43,6 @@ shinyApp(
     ),
     
     server = function(input, output, session) {
-        
-      
-      ##### reactive table output
-      
-        tab <- reactive({ 
-          
-          subset(all_values, name == input$search_key & value == input$search_value)
-            
-        })
       
       
       ##### reactive input field for text-search
@@ -65,13 +59,22 @@ shinyApp(
       selectizeInput('search_value', 'Search the DB', choices = c(value_choice())) 
       
       })
-        
+      
+      ##### reactive table output
+      
+        tab <- reactive({ 
+          
+          subset(all_values, name == input$search_key & value == input$search_value)
+            
+        })
+      
         
       ##### render output table
         
-        output$table <- renderTable({ 
+        output$table <- renderTable({
             
-            tab()
+            
+          tab()
             
         })
         
