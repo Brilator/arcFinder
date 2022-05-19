@@ -1,6 +1,5 @@
 
 
-
 ```{r}
 library(tidyverse)
 library(shiny)
@@ -15,30 +14,30 @@ all_values <- do.call(
 
 all_values <- as.data.frame(all_values)
 
-
-# data.frame(unlist(lapply(all_arcs_db, colnames)))
-# 
-# ### Flatten all keys into a 2-column (key | list) df to use as search field selection
-# 
-# all_keys <- list()
-# for(i in names(all_arcs_db)){
-#   all_keys[[i]] <- data.frame(keys = names(all_arcs_db[[i]]), list = i)
-# }
-# 
-# all_keys <- do.call(rbind.data.frame, all_keys)
-# all_keys_cleaned <- subset(all_keys, keys != "arc_id")
-
+arc_list <- unique(arc_list)
 
 shinyApp(
     ui = pageWithSidebar(
         headerPanel("CEPLAS-ARC Finder"),
         sidebarPanel(
             selectizeInput('search_key', 'Select a field to search', choices = c("Any field", unique(all_values$name))),
-            uiOutput("search_field")
+            uiOutput("search_field"), 
+            selectInput(inputId = "arc_path", label = "Select an ARC for details", choices = NULL),
+            br(),
+            h3("Access this ARC in the DataHUB"),
+            uiOutput("arc_gitlab"),
+             
         ),
         
         mainPanel(
-            tableOutput("table")
+          h3("Overview"),
+          tableOutput("table_INV"),
+          br(),
+          h3("Publications"),
+          tableOutput("table_INV_PUBS"),
+          br(),
+          h3("Contacts"),
+          tableOutput("table_INV_Contacts")
         )
     ),
     
@@ -59,38 +58,103 @@ shinyApp(
         }
         
       
-      selectizeInput('search_value', 'Search the DB', choices = sort(unique(df$value))) 
+      selectizeInput('search_value', 'Search the DB', selected = "", choices = sort(unique(df$value))) 
       
       })
       
-      ##### reactive table output
       
-        tab <- reactive({ 
+      ##### ARC choices (arc_id) matching user-input
+      
+        arc_choices_id <- reactive({ 
           
         if ('Any field' %in% input$search_key) {
-            subset(all_values, value == input$search_value)
-            } else {
-            subset(all_values, name == input$search_key & value == input$search_value)
-        }
+            
+          subset(all_values, value == input$search_value, arc_id, drop = T)
           
+          } else {
+          
+          subset(all_values, name == input$search_key & value == input$search_value, arc_id, drop = T)
+          }
           
         })
       
         
-      ##### render output table
+        ### retrieve path for matching ARCs from arc list
         
-        output$table <- renderTable({
-            
-            
-          tab()
+        arc_choices_path <- reactive({
+        
+        subset(arc_list, arc_id %in% arc_choices_id(), ARC.path, drop = T)
+      
+        })
+
+      ##### reactive ARC selection: updated Input to let user pick from 
+          
+        
+        observe({
+          updateSelectInput(session = session, inputId = "arc_path", choices = arc_choices_path())
+          })
+        
+        
+     #### User's ARC choice 
+        
+        selected_arc <- reactive({
+        
+        all_arcs[[as.character(subset(arc_list, ARC.path %in% input$arc_path, arc_id, drop = T))]]
+      
+        })
+      
+        
+      ##### render table INVESTIGATION 
+        
+        output$table_INV <- renderTable(colnames = F, rownames = F, {
+          
+          selected_table <- selected_arc()$INVESTIGATION
+          
+          selected_table$pivot_col <- row.names(selected_table)
+          long <- pivot_longer(selected_table, setdiff(colnames(selected_table), "pivot_col"), values_drop_na = T)
+          
+          pivot_wider(long, names_from = pivot_col)
+          
+        })        
+      
+      ##### render table INVESTIGATION PUBLICATIONS
+        
+        output$table_INV_PUBS <- renderTable(colnames = F, rownames = F, {
+          
+          selected_table <- selected_arc()$`INVESTIGATION PUBLICATIONS`
+
+          selected_table$pivot_col <- row.names(selected_table)
+          long <- pivot_longer(selected_table, setdiff(colnames(selected_table), "pivot_col"), values_drop_na = T)
+          
+          pivot_wider(long, names_from = pivot_col)
+          
+          
+        })
+        
+      ##### render table INVESTIGATION CONTACTS
+        
+        output$table_INV_Contacts <- renderTable(colnames = F, rownames = F, {
+          
+          
+          selected_table <- selected_arc()$`INVESTIGATION CONTACTS`
+
+          selected_table$pivot_col <- row.names(selected_table)
+          long <- pivot_longer(selected_table, setdiff(colnames(selected_table), "pivot_col"), values_drop_na = T)
+          
+          pivot_wider(long, names_from = pivot_col)
             
         })
+        
+    ##### render link to gitlab
+
+        output$arc_gitlab <- renderUI(a(href = paste0('https://git.nfdi4plants.org/', input$arc_path), 
+                                        paste0('https://git.nfdi4plants.org/', input$arc_path) ,target="_blank"))
         
     },
     
-    options = list(height = 500)
-    
 )
+          
+
 
 
 ```

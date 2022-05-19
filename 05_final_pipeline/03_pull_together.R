@@ -33,11 +33,11 @@ all_arcs_db <- do.call(Map, c(f = rbind, all_arcs))
 arc_list <- read.table(".tmp02_investigations/arc_list.tsv", sep = "\t", header = T)
 colnames(arc_list)[1] <- "arc_id"
 
-all_arcs_db[["arc_list"]] <- arc_list
+# all_arcs_db[["arc_list"]] <- arc_list
 
 ### store the output as RData
  
-save(all_arcs_db, file = ".tmp03_allARCs.RData")
+save(all_arcs, all_arcs_db, arc_list, file = ".tmp03_allARCs.RData")
 
 ### Write into an SQLite DB file
 
@@ -47,6 +47,8 @@ for(i in names(all_arcs_db))
 {
   dbWriteTable(mydb, i, all_arcs_db[[i]], overwrite = T)
 }
+
+dbWriteTable(mydb, "ARC list", arc_list, overwrite = T)
 
 dbListTables(mydb)
 dbDisconnect(mydb)
