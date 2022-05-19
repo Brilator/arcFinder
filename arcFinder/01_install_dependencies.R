@@ -3,11 +3,15 @@
 ### Script to install all R dependencies
 ############################################################
 
-required_packages <- c("tidyverse", "DBI", "shiny")
 
-for(package in required_packages)
-{
-  ## Check if package is installed. If not, install
-  if(!require(package, quietly = TRUE)){install.packages(package)}
-}
+if(!require(tidyverse, quietly = TRUE)){install.packages(tidyverse)}
+if(!require(DBI, quietly = TRUE)){install.packages(DBI)}
+if(!require(shiny, quietly = TRUE)){install.packages(shiny)}
+if(!require(renv, quietly = TRUE)){install.packages(renv)}
 
+renv::init(bare = T)
+
+# save library state to lockfile
+renv::snapshot()
+
+renv::status()
