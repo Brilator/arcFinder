@@ -30,7 +30,7 @@ titlepage-rule-height: 2
   - [User instructions](#user-instructions)
   - [Lessons learned](#lessons-learned)
 
-<!-- the horizontal line is for auto-TOC with vs extension -->
+<!-- the horizontal line is for auto-TOC with VS extension -->
 ----
 
 \pagebreak
