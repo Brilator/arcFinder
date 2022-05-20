@@ -1,14 +1,6 @@
 
 # ARC Finder
 
-## Preparation
-
-### Make the **arcFinder** executable
-
-```bash
-chmod a+x arcFinder.sh
-```
-
 ## Usage
 
 ### Public ARCs

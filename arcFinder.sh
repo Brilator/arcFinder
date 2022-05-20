@@ -5,7 +5,7 @@
 echo "### Restore virtual environment"
 echo "----------------------"
 
-Rscript 01_restore_dependencies.R 2>&1 >> .tmp01.log
+Rscript ./scripts/01_restore_dependencies.R 2>&1 >> .tmp01.log
 
 ########################################################
 ### Read GitLab personal access token (PAT)
@@ -47,7 +47,7 @@ echo "### Step 01: Downloading metadata of available ARCs from the DataHUB."
 echo "----------------------"
 
 echo "log of 02_read_from_gitlab.sh" > .tmp02.log
-bash 02_read_from_gitlab.sh -p "${gitlab_pat}" 2>&1 >> .tmp02.log
+bash ./scripts/02_read_from_gitlab.sh -p "${gitlab_pat}" 2>&1 >> .tmp02.log
 
 ########################################################
 ### Run xlsx parser
@@ -68,7 +68,7 @@ do
   
   arc_id=$(echo $current_inv_path | cut -d/ -f3 | cut -d"_" -f1)  
   
-  Rscript 03_parse_isaInvxlsx.R "$arc_id" $current_inv_path 2>&1 >> .tmp03.log
+  Rscript ./scripts/03_parse_isaInvxlsx.R "$arc_id" $current_inv_path 2>&1 >> .tmp03.log
 
 done
 
@@ -80,13 +80,13 @@ done
 echo "### Step 03: Building a searchable database of ARC metadata"
 echo "----------------------"
 
-Rscript 03_pull_together.R 2>&1 >> .tmp03.log
+Rscript ./scripts/03_pull_together.R 2>&1 >> .tmp03.log
 
 ########################################################
 ### Optional: Prepare SQLite database
 ########################################################
 
-Rscript 05_pull_together_sql.R 2>&1 >> .tmp05.log
+Rscript ./scripts/05_pull_together_sql.R 2>&1 >> .tmp05.log
 
 ########################################################
 ### Run the search APP
@@ -95,4 +95,4 @@ Rscript 05_pull_together_sql.R 2>&1 >> .tmp05.log
 echo "### Voila: The ARC Finder is running in your default browser."
 echo "### Close the browser window or tab to shut down the app."
 
-Rscript -e 'shiny::runApp("04_searchApp/", launch.browser = TRUE)' 2>&1 >> .tmp04.log
+Rscript -e 'shiny::runApp("./scripts/04_searchApp/app.R", launch.browser = TRUE)' 2>&1 >> .tmp04.log
