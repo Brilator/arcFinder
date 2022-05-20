@@ -20,7 +20,7 @@
 ########################
 
 ### If package "readxl" is not installed, install it.
-if(!require("readxl", quietly = TRUE)){install.packages("readxl")}
+# if(!require("readxl", quietly = TRUE)){install.packages("readxl")}
 
 ### load the package
 library(readxl)
@@ -129,8 +129,8 @@ for(i in 1:length(inv_sections))
 ### output to .RData
 ########################
 
-if(!dir.exists(".tmp03_rdata_dumps/")){dir.create(".tmp03_rdata_dumps/")}
+if(!dir.exists(".tmp/03_rdata_dumps/")){dir.create(".tmp/03_rdata_dumps/")}
 
-print(paste0("Storing outputs in: .tmp03_rdata_dumps/", arc_id, ".Rdata"))
+print(paste0("Storing outputs in: .tmp/03_rdata_dumps/", arc_id, ".Rdata"))
 
-save(investigation_list, isa_inv_wb, arc_id, file = paste0(".tmp03_rdata_dumps/", arc_id, ".RData"))
+save(investigation_list, isa_inv_wb, arc_id, file = paste0(".tmp/03_rdata_dumps/", arc_id, ".RData"))

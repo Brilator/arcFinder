@@ -48,10 +48,10 @@ done
 ############################
 
 # Writing to json first 
-curl --silent --request GET --header "PRIVATE-TOKEN: $gitlab_pat" "https://git.nfdi4plants.org/api/v4/projects/" > .tmp02_arcs_available.json
+curl --silent --request GET --header "PRIVATE-TOKEN: $gitlab_pat" "https://git.nfdi4plants.org/api/v4/projects/" > .tmp/02_arcs_available.json
 
 # grepping project IDs
-grep -oE '"id":[0-9]{1,},"description"' .tmp02_arcs_available.json | grep -oE '[0-9]{1,}' > .tmp02_arcs_ids
+grep -oE '"id":[0-9]{1,},"description"' .tmp/02_arcs_available.json | grep -oE '[0-9]{1,}' > .tmp/02_arcs_ids
 
 # Could be piped directly (without the temporary .json)
 # But will keep the json, for trouble-shooting
@@ -63,44 +63,44 @@ grep -oE '"id":[0-9]{1,},"description"' .tmp02_arcs_available.json | grep -oE '[
 ############################
 
 ### create a dump directory for the isa.investigation.xlsx files
-if ! [ -d ".tmp02_investigations" ]; then mkdir ".tmp02_investigations"; fi
+if ! [ -d ".tmp/02_investigations" ]; then mkdir ".tmp/02_investigations"; fi
 
 ### write a table to collect ARC id and path with namespace
-printf "ARC id\tARC path\tcomment" > .tmp02_investigations/arc_list.tsv
+printf "ARC id\tARC path\tcomment" > .tmp/02_investigations/arc_list.tsv
 
-all_arc_IDs=$(< .tmp02_arcs_ids)
+all_arc_IDs=$(< .tmp/02_arcs_ids)
 echo "$all_arc_IDs" | while IFS= read -r arc_id;
 do 
   # echo $arc_id
 
   ### get project info
-  curl --silent --header "PRIVATE-TOKEN: $gitlab_pat" "https://git.nfdi4plants.org/api/v4/projects/$arc_id" > .tmp02_current_arc_info.json
+  curl --silent --header "PRIVATE-TOKEN: $gitlab_pat" "https://git.nfdi4plants.org/api/v4/projects/$arc_id" > .tmp/02_current_arc_info.json
   
   ### extract git path with namespace
-  arc_path=$(grep -oE '"path_with_namespace":".*,"created_at' .tmp02_current_arc_info.json | cut -d'"' -f 4)    
+  arc_path=$(grep -oE '"path_with_namespace":".*,"created_at' .tmp/02_current_arc_info.json | cut -d'"' -f 4)    
 
   echo $arc_path
 
   ### get project tree
-  curl --silent --header "PRIVATE-TOKEN: $gitlab_pat" "https://git.nfdi4plants.org/api/v4/projects/$arc_id/repository/tree" > .tmp02_current_arc_tree.json
+  curl --silent --header "PRIVATE-TOKEN: $gitlab_pat" "https://git.nfdi4plants.org/api/v4/projects/$arc_id/repository/tree" > .tmp/02_current_arc_tree.json
 
   ### check that file `isa.investigation.xlsx` exists at ARC root
   ### if yes: download and dump
   ### if no: error message
   
-  inv_path=$(grep -oE '"path":"isa.investigation.xlsx",' .tmp02_current_arc_tree.json)
+  inv_path=$(grep -oE '"path":"isa.investigation.xlsx",' .tmp/02_current_arc_tree.json)
 
   ### check if variable is empty
   if [ -z "$inv_path" ]
   then
     printf "Missing 'isa.investigation.xlsx' at the root of $arc_path\n"
-    printf "\n$arc_id\t$arc_path\tisa.investigation.xlsx missing" >> .tmp02_investigations/arc_list.tsv
+    printf "\n$arc_id\t$arc_path\tisa.investigation.xlsx missing" >> .tmp/02_investigations/arc_list.tsv
   else
-    curl -L --silent --request GET --header "PRIVATE-TOKEN: $gitlab_pat" "https://git.nfdi4plants.org/api/v4/projects/$arc_id/repository/files/isa%2Einvestigation%2Exlsx/raw?ref=main" -o .tmp02_investigations/$arc_id'_isa.inv.xlsx'
-    printf "\n$arc_id\t$arc_path\tisa.investigation.xlsx detected" >> .tmp02_investigations/arc_list.tsv
+    curl -L --silent --request GET --header "PRIVATE-TOKEN: $gitlab_pat" "https://git.nfdi4plants.org/api/v4/projects/$arc_id/repository/files/isa%2Einvestigation%2Exlsx/raw?ref=main" -o .tmp/02_investigations/$arc_id'_isa.inv.xlsx'
+    printf "\n$arc_id\t$arc_path\tisa.investigation.xlsx detected" >> .tmp/02_investigations/arc_list.tsv
   fi  
 
-  rm .tmp02_current_arc*
+  rm .tmp/02_current_arc*
 
 done
 
