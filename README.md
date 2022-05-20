@@ -1,18 +1,41 @@
 
-# ARC Finder
+# ARC-Finder &ndash; A simple, locally-deployed tool to find your peer's research data
+
+This is a tool to help you find metadata about ARCs stored in the DataPLANT [DataHUB](https://git.nfdi4plants.org/).
+Visit the [DataPLANT website](<https://nfdi4plants.de>) for more information about ARCs (annotated research contexts).
 
 ## Usage
 
-### Search public ARCs only
+- Git clone or download this repository.
+- Open a command line or terminal and navigate to the `arcFinder` directory.
+- Run one of the following two options:
+
+### Option 1: Search public ARCs only
 
 ```bash
 ./arcFinder.sh
 ```
 
-### Search Public + privately shared ARCs
+### Option 2: Search Public + privately shared ARCs
 
 > Note: Replace `<gitlab pat>` with the path pointing to a file which stores a GitLab personal access token (PAT).
 
 ```bash
 ./arcFinder.sh -p <gitlab pat>
+```
+
+### Registration with DataPLANT
+
+In order to use the `<gitlab pat>` option, please follow these steps:
+
+1. [Sign up](<https://register.nfdi4plants.org/>) with DataPLANT.
+2. Generate a personal access token in the [DataHUB PAT settings](https://git.nfdi4plants.org/-/profile/personal_access_tokens)
+   - Provide a "Token name", e.g. `arcFinder`
+   - Select either option "api" or "read_api" and click "Create personal access token"
+   - Copy the generated token on top of the page.
+3. Paste the bare token into a text file and save it (e.g. `gitlab_token` stored in the root of this directory)
+4. Supply the file path to `arcFinder`, e.g.:
+
+```bash
+./arcFinder.sh -p gitlab_token
 ```
