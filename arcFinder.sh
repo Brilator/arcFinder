@@ -72,12 +72,11 @@ echo "### Step 02: Structuring ARC metadata."
 echo "----------------------"
 echo "log of 03_parse_isaInvxlsx.R" > .tmp/03.log
 
-invs=$(find .tmp/02_investigations/ -name '*.xlsx' | sort -n)
+invs=$(find .tmp/02_investigations -name '*.xlsx' | sort -n)
 echo "$invs" | while IFS= read -r current_inv_path;
 do 
-  
-  arc_id=$(echo $current_inv_path | cut -d/ -f4 | cut -d"_" -f1)  
-  
+  arc_id=$(echo $current_inv_path | cut -d/ -f3 | cut -d"_" -f1)  
+    
   Rscript ./scripts/03_parse_isaInvxlsx.R "$arc_id" $current_inv_path 2>&1 >> .tmp/03.log
 
 done
