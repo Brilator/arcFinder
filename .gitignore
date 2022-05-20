@@ -388,3 +388,4 @@ gitlab_token
 .arcs*
 .tmp*
 05_final_pipeline/05_allARCs_database.sqlite
+.vscode/settings.json
