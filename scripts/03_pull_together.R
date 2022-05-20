@@ -6,7 +6,7 @@
 
 all_arcs <- list()
 
-for(i in dir(".tmp03_rdata_dumps/", full.names = T, pattern = ".RData"))
+for(i in dir(".tmp/03_rdata_dumps/", full.names = T, pattern = ".RData"))
 {
   ### load the data
   load(i)
@@ -24,11 +24,11 @@ all_arcs_db <- do.call(Map, c(f = rbind, all_arcs))
 ### read the arc_list (translating the ARC id to the ARC path) produced by 02_read_from_gitlab.sh
 ### and append to above list
 
-arc_list <- read.table(".tmp02_investigations/arc_list.tsv", sep = "\t", header = T)
+arc_list <- read.table(".tmp/02_investigations/arc_list.tsv", sep = "\t", header = T)
 colnames(arc_list)[1] <- "arc_id"
 
 # all_arcs_db[["arc_list"]] <- arc_list
 
 ### store the output as RData
  
-save(all_arcs, all_arcs_db, arc_list, file = ".tmp03_allARCs.RData")
+save(all_arcs, all_arcs_db, arc_list, file = ".tmp/03_allARCs.RData")

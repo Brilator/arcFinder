@@ -5,7 +5,7 @@
 if(!require("DBI", quietly = TRUE)){install.packages("DBI")}
 library(DBI)
 
-load(".tmp03_allARCs.RData")
+load(".tmp/03_allARCs.RData")
 
 ### Write into an SQLite DB file
 
