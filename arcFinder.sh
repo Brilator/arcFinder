@@ -1,5 +1,20 @@
 ########################################################
-### Pull together data
+### Create root folder for temporary data
+########################################################
+
+### If exists, remove and create fresh. 
+### This is to prevent data piling.
+### TODO Should probably be replaced with safer / better logic for debugging. TODO
+
+if [ -d ".tmp/" ]; then
+  rm -r .tmp/
+  mkdir .tmp/
+else
+  mkdir .tmp/
+fi
+
+########################################################
+### Resotre renv session
 ########################################################
 
 echo "### Restore virtual environment"
@@ -66,7 +81,7 @@ invs=$(find .tmp/02_investigations/ -name '*.xlsx' | sort -n)
 echo "$invs" | while IFS= read -r current_inv_path;
 do 
   
-  arc_id=$(echo $current_inv_path | cut -d/ -f3 | cut -d"_" -f1)  
+  arc_id=$(echo $current_inv_path | cut -d/ -f4 | cut -d"_" -f1)  
   
   Rscript ./scripts/03_parse_isaInvxlsx.R "$arc_id" $current_inv_path 2>&1 >> .tmp/03.log
 
@@ -95,4 +110,4 @@ Rscript ./scripts/05_pull_together_sql.R 2>&1 >> .tmp/05.log
 echo "### Voila: The ARC Finder is running in your default browser."
 echo "### Close the browser window or tab to shut down the app."
 
-Rscript -e 'shiny::runApp("./scripts/04_searchApp/app.R", launch.browser = TRUE)' 2>&1 >> .tmp/04.log
+Rscript -e 'load(".tmp/03_allARCs.RData"); shiny::runApp("./scripts/04_searchApp/app.R", launch.browser = TRUE)' 2>&1 >> .tmp/04.log

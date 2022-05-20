@@ -20,7 +20,7 @@
 ########################
 
 ### If package "readxl" is not installed, install it.
-if(!require("readxl", quietly = TRUE)){install.packages("readxl")}
+# if(!require("readxl", quietly = TRUE)){install.packages("readxl")}
 
 ### load the package
 library(readxl)
