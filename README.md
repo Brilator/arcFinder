@@ -3,14 +3,16 @@
 
 ## Usage
 
-### Public ARCs
+### Search public ARCs only
 
 ```bash
-./arcFinder.sh ## access to public ARCs only
+./arcFinder.sh
 ```
 
-### Public + privately shared ARCs
+### Search Public + privately shared ARCs
+
+> Note: Replace `<gitlab pat>` with the path pointing to a file which stores a GitLab personal access token (PAT).
 
 ```bash
-./arcFinder.sh -p <gitlab pat> ## access to shared, non-public ARCs. GitLab PAT supplied as file path or string
+./arcFinder.sh -p <gitlab pat>
 ```

@@ -40,18 +40,13 @@ done
 ### If not, use the input (PAT as a string) directly
 
 if [ -f "$gitlab_pat" ]; then
-    echo "Using GitLab token stored in '$gitlab_pat'."
-    gitlab_pat=$(< gitlab_token)
-    # gitlab_pat=$(< $gitlab_pat)
-else 
-    echo "Using supplied GitLab token"
-    # This would be gitlab_pat=$gitlab_pat   ### TODO: probably safer to change this 
+    echo "Using GitLab token stored in '$gitlab_pat'."    
+    gitlab_pat=$(< $gitlab_pat)
 fi
 
 ### check if string is empty
 
 [ -z "$gitlab_pat" ] && printf "No GitLab token supplied or GitLab token is empty. \nReading from public ARCs only.\n"
-
 
 ########################################################
 ### Run gitlab reader
