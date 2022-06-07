@@ -20,9 +20,3 @@ dbWriteTable(mydb, "ARC list", arc_list, overwrite = T)
 
 dbListTables(mydb)
 dbDisconnect(mydb)
-
-
-
-
-
-

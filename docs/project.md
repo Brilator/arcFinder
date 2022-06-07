@@ -17,8 +17,9 @@ titlepage-rule-height: 2
 
 # Contents
 
-- [Motivation](#motivation)
-- [State of the art](#state-of-the-art)
+- [Introduction](#introduction)
+  - [Motivation](#motivation)
+  - [State of the art](#state-of-the-art)
 - [Approach](#approach)
 - [Caveats and places for future improvements](#caveats-and-places-for-future-improvements)
   - [isa.investigation.xlsx](#isainvestigationxlsx)
@@ -35,14 +36,18 @@ titlepage-rule-height: 2
 
 \pagebreak
 
-# Motivation
+# Introduction
+
+## Motivation
 
 Research is a highly collaborative endeavor that builds on synergistic interaction between different stakeholders enabled by efficient knowledge exchange. Gaining a prompt overview of the ongoing research efforts &ndash; both pre- and post-publication &ndash; is oftentimes hindered (for social, legal or technical reasons) even between parties of spatially closest and well trusted surroundings of a collaborative consortium such as the Cluster of Excellence on Plant Sciences (CEPLAS[^CEPLAS]). The key to enable discussion on and exchange of research data is *findability*, the first layer of the FAIR principles of data stewardship. The project presented here aims to address this layer, by making CEPLAS research easily findable and visible amongst CEPLAS researchers and showcase the beauty and ease of data sharing to spike fruitful collaborations with peers.
 
-# State of the art
+## State of the art
 
 Research data management within CEPLAS is closely aligned with DataPLANT[^DataPLANT], the NFDI consortium for plant sciences. DataPLANT has developed the Annotated Research Context (ARC[^ARC]), a directory structure for research objects. Annotation of research data in the ARC is based on the metadata schema ISA[^ISA] (for investigation &ndash; study &ndash; assay). Serialized in spread sheet format as *ISA-tab* this allows intuitive, flexible and yet structured and conclusive metadata annotation of the versatile data types produced in plant sciences. ARCs are git[^git] repositories that can be shared via DataPLANT's DataHUB[^DataHUB], a customized GitLab[^GitLab] instance with a federated authentication interface to allow controlled access across institute borders.
 Although the ARC environment is continuously being developed, the choice of these key technical pillars are set: (a) ARC as the structure, (b) ISA as the metadata language, (c) git as version control logic and (d) gitlab for ARC collaboration and user management. This allows to leverage the ARC and develop at least intermediate solutions for data findability, knowing that time and efforts are well-invested, since both (meta)data inputs in as well as secondary outputs dependent on the ARC will be adoptable and migratable in the future.
+
+
 
 # Approach
 
@@ -54,6 +59,11 @@ This project focuses on metadata at the highest project and least sensitive (i.e
 1. representation.
 
 First, metadata is collected &ndash; manually or supported by automation &ndash; in the ISA investigation spread sheet, packaged in ARCs and submitted to the DataHUB by individual volunteers. Here, access to the ARCs can be controlled to share them publicly or with invited collaborators. The CEPLAS-ARC-Finder selectively retrieves, downloads and dumps the metadata locally on the user's machine. The CEPLAS-ARC-Finder then restructures the metadata into a simple spreadsheet-based database. From the database the investigation data is finally read and represented by a user interface that enables finding the data available to the individual user.
+
+![ARC-Finder Workflow. First, the ARC-Finder retrieves accessible data from the DataHUB (1). Depending on user-choice and provided access token either publicly available (1a) or public plus privately shared (1b) ARCs are read and stored in a local data dump.](slides/2022-06-10_arcFinder_slides_brilhaus/2022-06-10_arcFinder_slides_brilhaus.001.png)
+
+![ARC-Finder GUI.](slides/2022-06-10_arcFinder_slides_brilhaus/2022-06-10_arcFinder_slides_brilhaus.002.png)
+
 
 # Caveats and places for future improvements
 
@@ -108,16 +118,37 @@ R | 4.2.0 | x86_64-apple-darwin17.0
 
 ### R libraries
 
-To provide best reproducibility, R dependencies are handled via package `renv`[^renv] (version 0.15.3) and stored in the root file "renv.lock". In the first step of `arcFinder`, the virtual environment is automatically restored, including installation of all required dependencies. Depending on the local setup (installation of R and packages), this may take some time. However, `renv` prevents interference with the local setup, thus keeping your system intact. The following lists packages specifically loaded for individual R scripts:
+To provide best reproducibility, R dependencies are handled via package `renv`[^renv] (version 0.15.3) and stored in the root file "renv.lock". In the first step of `arcFinder`, the virtual environment is automatically restored, including installation of all required dependencies. Depending on the local setup (installation of R and packages), this may take some time. However, `renv` prevents interference with the local setup, thus keeping the system intact. The following table lists packages specifically loaded for individual R scripts:
 
-Script name | Package | Main purposes
+<!-- TODO: Table xy -->
+
+<!-- Package (version) | Main purpose | Used in script(s)
 ---------|----------|---------
-03_parse_isaInvxlsx.R | readxl_1.4.0 (part of `tidyverse`) | Reading data from Microsoft Excel workbooks
+renv_0.15.4 | Manage R package dependencies | 01_install_dependencies.R, 01_restore_dependencies.R
+readxl_1.4.0 (part of `tidyverse`) | Read data from Microsoft Excel workbooks | 03_parse_isaInvxlsx.R
+tidyverse_1.3.1 | Tidy data into a useful format | 04_searchApp/app.R
+shiny_1.7.1 | Prepare and launch a shiny app | 04_searchApp/app.R
+DBI_1.1.2 | Write data to an `*.sqlite` object | 05_pull_together_sql.R -->
+
+
+\begin{longtable}[]{llllllll}
+\caption[ok this is the caption?]{I am the new caption here.} \\
+\toprule
+Package (version) & Main purpose & Used in script(s)\tabularnewline
+\midrule
+\endhead
+renv\_0.15.4 & Manage R package dependencies & 01\_install\_dependencies.R, 01\_restore\_dependencies.R\tabularnewline
+readxl\_1.4.0 (part of `tidyverse`) & Read data from Microsoft Excel workbooks & 03\_parse\_isaInvxlsx.R\tabularnewline
+tidyverse\_1.3.1 & Tidy data into a useful format & 04\_searchApp/app.R\tabularnewline
+shiny\_1.7.1 & Prepare and launch a shiny app & 04\_searchApp/app.R\tabularnewline
+DBI\_1.1.2 & Write data to an `*.sqlite` object & 05\_pull\_together\_sql.R\tabularnewline
+\bottomrule
+\end{longtable}
 
 ### Platform
 
-- The DataPLANT's DataHUB[^DataHUB] is a customized instance of GitLab[^GitLab], currently running under ### TODO version ###
-- Data is retrieved via GitLab API version 4
+- The DataPLANT's DataHUB[^DataHUB] is a customized instance of GitLab[^GitLab], currently running under version 14.10.2, hosted and maintained by the DataPLANT node at Albert-Ludwigs-University Freiburg.
+- Data is retrieved from the DataHUB via GitLab API version 4
 
 After registration[^dpregister] with DataPLANT, users can share and access non-public ARCs via DataPLANT's DataHUB[^DataHUB].
 As explained in the `arcFinder`'s README, a GitLab private access token (PAT) needs to be generated within the DataHUB[^DataHUB] and provided to `arcFinder`.
