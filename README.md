@@ -39,3 +39,7 @@ In order to use the `<gitlab pat>` option, please follow these steps:
 ```bash
 ./arcFinder.sh -p gitlab_token
 ```
+
+## ARC-Finder in action
+
+Checkout the gif under <https://github.com/Brilator/arcFinder/blob/main/docs/arcFinder_gif.md> to see the ARC-Finder in action. 
