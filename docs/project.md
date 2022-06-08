@@ -13,6 +13,7 @@ titlepage-text-color: "FFC000"
 titlepage-rule-color: "FFC000"
 titlepage-rule-height: 2
 header-includes:
+
 - \usepackage{longtable, array, booktabs}
 ...
 
@@ -31,85 +32,47 @@ Research is a highly collaborative endeavor that builds on the synergistic inter
 
 Research data management (RDM) within CEPLAS is closely aligned with DataPLANT[^DataPLANT], the NFDI[^NFDI] consortium for plant sciences. At the heart of DataPLANT's RDM strategy lies the Annotated Research Context (ARC[^ARC]), a directory structure that packages research data together with associated metadata and computational workflows into self-sustained research objects. Annotation of research data in the ARC is based on the metadata schema ISA[^ISA] (for investigation &ndash; study &ndash; assay). Serialized in spread sheet format as *ISA-tab* this enables intuitive, flexible and yet structured and conclusive metadata annotation of the versatile data types produced in plant sciences. ARCs are git[^git] repositories that can be shared via DataPLANT's DataHUB[^DataHUB], a customized GitLab[^GitLab] instance with a federated authentication interface to allow controlled access across institute borders.  
 Although the ARC environment is continuously being developed, the choice of these key technical pillars are set: (a) ARC as the structure, (b) ISA as the metadata language, (c) git as version control logic and (d) gitlab for ARC collaboration and user management. This allows to leverage the ARC environment and develop (intermediate) solutions for data findability, knowing that time and efforts are well-invested, since both (meta)data ingest into as well as secondary outputs dependent on the ARC will be adoptable and migratable in the future.  
-While (contents of the) ARCs can be searched via standard GitLab-implemented mechanisms within the DataHUB or via standard routines on a user's system where the ARCs are locally cloned and stored, a structured and user-friendly search interface tailored to metadata stored in multiple ARCs is currently unavailable. With the ARC-Finder presented here, I seek to close this gap.
+While (contents of the) ARCs can be searched via standard GitLab-implemented mechanisms within the DataHUB or via standard routines on a user's system where the ARCs are locally cloned and stored, a structured and user-friendly search interface tailored to metadata stored in multiple ARCs &ndash; including unpublihed ARCs &ndash; is currently unavailable. With the ARC-Finder presented here, I seek to close this gap with a lightweight quickfix.
 
-# Approach
-
-## The ARC-Finder workflow
-
-The ARC-Finder employs three concerted, but independent modules of metadata retrieval, restructure, and representation (Fig. 1).
-
-![ARC-Finder Workflow. Depending wether the user provided a gitlab personal access token (PAT). the ARC-Finder retrieves publicly (1a) or publicly and privately (1b) accessible metadata from the DataHUB and stores it in a local data dump. The metadata is re-structured into a searchable database (2) and fed into the ARC-Finder GUI (3, details see Fig. 2) as well as provided as an SQLite database (DB) (4).](slides/2022-06-10_arcFinder_slides_brilhaus/2022-06-10_arcFinder_slides_brilhaus.001.png)
-
-
-Depending on user-choice and gitlab personal access token (PAT) either publicly available (1a) or public plus privately shared (1b) ARCs are read and stored in a local data dump (see also user instructions in [README.md](#readmemd)).
-
-From the ISA investigation workbooks (`isa.investigation.xlsx`) stored at the roots of every ARC. The CEPLAS-ARC-Finder selectively retrieves, downloads and dumps the metadata locally on the user's machine. The CEPLAS-ARC-Finder then restructures the metadata into a simple spreadsheet-based database. From the database the investigation data is finally read and represented by a user interface that enables finding the data available to the individual user.
-
-## The ARC-Finder GUI
-
-![ARC-Finder GUI.](slides/2022-06-10_arcFinder_slides_brilhaus/2022-06-10_arcFinder_slides_brilhaus.002.png)
-
-## SQLite database as alternative output
-
-## Data safety
-
-This project focuses on metadata at the highest project and least sensitive (i.e. ISA's "investigation") level to minimize user input or possible discomfort with data sharing
-- outsourced to DataHUB
-
-Here, access to the ARCs can be controlled to share them publicly or with invited collaborators. 
+# Implementation
 
 ## Technical back-end
 
-The technical back-end of the ARC-Finder is a combination of shell and R scripts and leveraging on the GitLab API (version 4). The idea was to rely on as few code environments as possible. The actual code work is attached in the supplemental materials (see [scripts](#scripts)) and available online (see [availability](#availability)). Software dependencies are listed in the supplemental materials (see [dependencies](#dependencies)).
+The technical back-end of the ARC-Finder is a combination of shell and R scripts. For data retrieval it leverages the GitLab API [^gitlab_api]. The GUI is based on RStudio's ShinyApp[^shiny]. The design idea was to rely on as few programming language environments as possible. The actual code work is attached in the supplemental materials (see [scripts](#scripts)) and available online (see [availability](#availability)). Software dependencies are listed in the supplemental materials (see [dependencies](#dependencies)).
+
+## The ARC-Finder workflow
+
+The ARC-Finder employs three concerted, but independent modules of metadata retrieval, restructure, and representation (Fig. 1).  
+
+
+![**The ARC-Finder Workflow**. Depending wether the user provided a gitlab personal access token (PAT). the ARC-Finder retrieves publicly (1a) or publicly and privately (1b) accessible metadata from the DataHUB and stores it in a local data dump. The metadata is restructured into a searchable database (2) and fed into the ARC-Finder graphical user interface (GUI) for clear representation (3, details see Fig. 2) as well as provided as an SQLite database (DB) (4).](slides/2022-06-10_arcFinder_slides_brilhaus/2022-06-10_arcFinder_slides_brilhaus.001.png)  
+
+The ARC-Finder can be run in two modes. If the user does not supply a gitlab personal access token (PAT), the ARC-Finder retrieves metadata only from publicly accessible ARCs. If a functional PAT is provided by the registered user, metadata is retrieved from both public and privately shared ARCs. For detailed user instructions see [README.md](#readmemd). The ARC-Finder selectively scans all user-accessible ARCs only for the ISA investigation workbooks (`isa.investigation.xlsx`) stored at the root of every ARC. The identified workbooks are downloaded and dumped locally in a temporary folder on the user's machine. Next, the ARC-Finder restructures the investigation-level metadata into a simple spreadsheet-based database. From the database the metadata is fed into and represented by the ARC-Finder graphical user interface (GUI).  
+
+\pagebreak
+
+## The ARC-Finder GUI
+
+The ARC-Finder GUI is a responsive ShinyApp running in the user's default web browser (Fig. 2). Three dropdown search fields build the core of the GUI's *Query Panel*. The user can select to search any or a specific metadata attribute (Fig. 2 - Field 1) for specific terms provided as free-text or selected from the search field (Fig. 2 - Field 1). Matching ARCs are listed for selection in a dropdown menu (Fig. 2 - Field 3). Once an ARC is selected, a click on the "Show this ARC" button (Fig. 2 - Field 4) reveals the metadata associated with the ARC in the *Result Panel* and provides a link to the respective ARC in the DataHUB (Fig. 2 - Field 5).  
+
+![**The ARC-Finder GUI** is divided into two panels. The user can search for available ARCs in the *Query Panel* (left, details elaborated in the text). Investigation-level metadata of the selected ARC is presented in the *result panel* (right).](slides/2022-06-10_arcFinder_slides_brilhaus/2022-06-10_arcFinder_slides_brilhaus.002.png)  
 
 # Discussion
 
-- The arcFinder provides a comparably easy approach
-- Can immediately be used
-  - I can add my ARC to the DataHUB and have it directly listed by the arcFinder
+With the ARC-Finder presented here, I tried to tackle a common challenge of RDM within CEPLAS (and likewise many other collaborative research consortia): easy and structured findability of research data of peers, including unpublished datasets that are just in the making. The ARC-Finder is built on the developments within DataPLANT surrounding the ARC environment and especially relies on the ISA metadata model and the GitLab-backed DataHUB.  
+Leveraging on the ARC environment, the ARC-Finder follows a comparably straight-forward approach and yields an instantaneous benefit to the researcher. Metadata provided by the user to collaboration partners via the DataHUB becomes immediately searchable via the ARC-Finder. While advocating FAIR data stewardship to the users (e.g. plant researchers), one of the major hurdles is the continuously changing plethora of platforms and tools offering one or the other RDM service (supposedly in a better way than competitors). This can range from a variation of electronic lab notebooks, cloud services, wikis, repositories or even chat software, leaving the researcher frustrated and unwilling to use (or adopt to) yet another RDM platform in the future. The ARC-Finder show-cases how the use of established standards, the ISA metadata model and git, facilitates extensibility and boosts sustainable RDM. Even if the tool itself may not see a long-term interest, it serves a quick benefit, while all metadata provided to the DataHUB will be integrable with future developments, including a more sophisticated metadata registry. This avoids user friction and makes the ARC environment more appealing to the researchers. To provide an example for an alternative output, the ARC-Finder stores the structured data as an SQLite database (termed `yourARCs_database.sqlite`) for use in third party applications, Fig. 1 - Field 4).  
+While the ARC-Finder can list unpublished and thus possibly sensitive data, it does not itself handle any user rights. Data safety and access management depends on the authentication mechanisms provided by the DataHUB. Here, access to the ARCs can be controlled to share them publicly or with invited collaborators. Still, by design the ARC-Finder focuses on metadata at the highest project and least sensitive (i.e. ISA's "investigation") level to minimize possible discomfort with data sharing.  
+The simple design of the ARC-finder comes with a few caveats and leaves room for future improvements. For reasons of simplicity and data safety (see above), the depth of metadata findability is limited to the investigation-level, ignoring the biologically more relevant study and assay levels of the ISA model. Furthermore, only those ARCs shared by individual users (not groups) are included and the ARC-Finder only searches the default `main` branch of the ARCs git backend. Both limitations could be easily extended in future versions of the ARC-Finder.  
+Several design decisions limit the ARC-finder's efficiency and scalability. The ARC-Finder is solely deployed locally and does not store any data or interaction on a server-side. Every time the ARC-Finder is run, it removes and overwrites the temporary database from earlier runs rather than updating or appending to it. In the current version, the user cannot make any pre-selection about the scope of ARCs to be searched, e.g. only ARCs associated to a specific user or group. Thus every ARC-Finder run scans and retrieves data from all available ARCs. Two paralleling serializations of ISA metadata exist in the ARC. The user-centered ISA workbooks (e.g. `isa.investigation.xlsx`) allow for intuitive metadata annotation. However, depending on the complexity of the ARC as well as the user input, these files can easily become relatively big adding to the efficiency issue. For programmatic interaction all ISA metadata in the ARC can be exported to the lightweight and less error-prone JSON format (termed `arc.json`). The decision to center the ARC-Finder around the `isa.investigation.xlsx` workbook was made to spare another dependency detour to convert between formats.
 
-- One of the major hurdles in advocating FAIR data stewardship to the users is the continuously changing plethora of platforms, tools and schema.
-- Integrable with future developments to avoid user friction
-
-- Extensibility (within DataPLANT: beauty of standards )
-  - Designed on purpose limited. User.
-  - Show-case how use of standards can boost sustainable research data management.
+ <!-- and having the benefit of direct user-input 
+ - direct to isa.investigation.xlsx can be read immediately
+-->
+  
+ <!-- - Designed on purpose limited
   - Vehicle for communication
-  - While most tools in DataPLANT are based on other programming languages…
-
-- SQL Alternative
-
-## Caveats and places for future improvements
-
-### isa.investigation.xlsx
-
-- read from isa.json rather than isa.investigation.xlsx
-- Rationale: yet another detour / dependency to produce isa.json
-- direct user-input to isa.investigation.xlsx can be read immediately
-- xlsx can become big and needs to be dumped
-- json could be read on-the-fly
-
-### group-associated ARCs
-
-- are currently excluded
-
-### branches
-
-- reading only from default git branch `main` (not e.g. master or others)
-
-### efficiency
-
-- tool dumps, pulls freshly every time it is called
-  - nothing memorized and updated
-  - by design sqlite db is always overwritten -> data could be appended
-- selectivity
-  - not all ARCs, but just selection (e.g. group)
-  - error-prone: non-clean ARCs
-
-### Scalability
-
-- CI / CD, public access / deployment
+  - While most tools in DataPLANT are based on other programming languages… -->
+<!-- - Not perfectly scalable. CI / CD, public access / deployment -->
 
 \pagebreak
 
@@ -165,9 +128,9 @@ The DataPLANT's DataHUB[^DataHUB] is a customized instance of GitLab[^GitLab], c
 After registration[^dpregister] with DataPLANT, users can share and access non-public ARCs via the DataHUB.
 As explained in the `arcFinder`'s README, a GitLab private access token (PAT) needs to be generated within the DataHUB and provided to `arcFinder`.
 
-## Checks and tests
+## Tests
 
-Currently tested only under macOS Monterey 12.3.1 (x86_64-apple-darwin17.0, 64-bit) with software versions specified under [Dependencies](#dependencies).
+The ARC-Finder was currently tested only under macOS Monterey 12.3.1 (x86_64-apple-darwin17.0, 64-bit) with software versions specified under [Dependencies](#dependencies).
 
 ## Deviation from the original concept
 
@@ -176,11 +139,13 @@ As this workflow (a) targets a completely other "side" of the ARC and DataHUB en
 
 <!-- Footnotes -->
 
-[^NFDI]: Nationale Forschungsdaten Infrastruktur, https://www.nfdi.de/
-[^wilkinson2016]: Wilkinson, M., Dumontier, M., Aalbersberg, I. et al. The FAIR Guiding Principles for scientific data management and stewardship. Sci Data 3, 160018 (2016). https://doi.org/10.1038/sdata.2016.18
-[^go-fair]: GO-FAIR, https://www.go-fair.org/fair-principles/
+[^NFDI]: Nationale Forschungsdaten Infrastruktur, <https://www.nfdi.de/>
+[^wilkinson2016]: Wilkinson, M., Dumontier, M., Aalbersberg, I. et al. The FAIR Guiding Principles for scientific data management and stewardship. Sci Data 3, 160018 (2016). <https://doi.org/10.1038/sdata.2016.18>
+[^go-fair]: GO-FAIR, <https://www.go-fair.org/fair-principles/>
 [^CEPLAS]: CEPLAS, <https://ceplas.eu>
-[^DataPLANT]: DataPLANT, <https://nfdi4plants.de> 
+[^DataPLANT]: DataPLANT, <https://nfdi4plants.de>
+[^shiny]: ShinyApps, <https://www.shinyapps.io/>
+[^gitlab_api]: GitLab Application Programming Interface (API), <https://docs.gitlab.com/ee/api/>
 [^dpregister]: DataPLANT registration, <https://register.nfdi4plants.org/>
 [^DataHUB]: DataPLANT DataHUB, <https://git.nfdi4plants.org>
 [^ARC]:  ARC specifications, <https://github.com/nfdi4plants/ARC-specification/>
