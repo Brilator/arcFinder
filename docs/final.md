@@ -128,9 +128,9 @@ The DataPLANT's DataHUB[^DataHUB] is a customized instance of GitLab[^GitLab], c
 After registration[^dpregister] with DataPLANT, users can share and access non-public ARCs via the DataHUB.
 As explained in the `arcFinder`'s README, a GitLab private access token (PAT) needs to be generated within the DataHUB and provided to `arcFinder`.
 
-## Checks and tests
+## Tests
 
-Currently tested only under macOS Monterey 12.3.1 (x86_64-apple-darwin17.0, 64-bit) with software versions specified under [Dependencies](#dependencies).
+The ARC-Finder was currently tested only under macOS Monterey 12.3.1 (x86_64-apple-darwin17.0, 64-bit) with software versions specified under [Dependencies](#dependencies).
 
 ## Deviation from the original concept
 
@@ -316,6 +316,10 @@ In order to use the `<gitlab pat>` option, please follow these steps:
 ```bash
 ./arcFinder.sh -p gitlab_token
 ```
+
+#### ARC-Finder in action
+
+Checkout the gif under <https://github.com/Brilator/arcFinder/blob/main/docs/arcFinder_gif.md> to see the ARC-Finder in action. 
 \pagebreak
 
 ## scripts/01_install_dependencies.R

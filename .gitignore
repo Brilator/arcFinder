@@ -391,3 +391,4 @@ gitlab_token
 .vscode/settings.json
 yourARCs_database.sqlite
 docs/tmp_readme
+docs/final.md
