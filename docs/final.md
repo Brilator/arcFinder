@@ -5,13 +5,14 @@ date: "2022-06-09"
 keywords: [Metadata, ARC, DataPLANT]
 subtitle: "Projektmodul (Modul 9) des Zertifikatskurs FDM (15.07) 2021 / 2022"
 lang: "en"
+toc: true
+toc-own-page: true
 titlepage: true
 titlepage-color: "2D3E50"
 titlepage-text-color: "FFC000"
 titlepage-rule-color: "FFC000"
 titlepage-rule-height: 2
 header-includes:
-
 - \usepackage{longtable, array, booktabs}
 ...
 
@@ -20,59 +21,47 @@ header-includes:
 <!-- pandoc template from: https://github.com/Wandmalfarbe/pandoc-latex-template -->
 <!-- pandoc project.md -o project.pdf --from markdown --template eisvogel --listings -->
 
-# Contents
-
-- [Introduction](#introduction)
-  - [Motivation](#motivation)
-  - [State of the art](#state-of-the-art)
-- [Approach](#approach)
-  - [Technical back-end](#technical-back-end)
-  - [Data safety](#data-safety)
-- [Discussion](#discussion)
-  - [Caveats and places for future improvements](#caveats-and-places-for-future-improvements)
-- [Supplemental Material](#supplemental-material)
-  - [Availability](#availability)
-  - [Dependencies](#dependencies)
-  - [Checks and tests](#checks-and-tests)
-  - [Deviation from the original concept](#deviation-from-the-original-concept)
-- [Scripts](#scripts)
-
-<!-- the horizontal line is for auto-TOC with VS extension -->
-----
-
-\pagebreak
-
 # Introduction
 
 ## Motivation
 
-Research is a highly collaborative endeavor that builds on synergistic interaction between different stakeholders enabled by efficient knowledge exchange. Gaining a prompt overview of the ongoing research efforts &ndash; both pre- and post-publication &ndash; is oftentimes hindered (for social, legal or technical reasons) even between parties of spatially closest and well trusted surroundings of a collaborative consortium such as the Cluster of Excellence on Plant Sciences (CEPLAS[^CEPLAS]). The key to enable discussion on and exchange of research data is *findability*, the first layer of the FAIR principles of data stewardship. The project presented here aims to address this layer, by making CEPLAS research easily findable and visible amongst CEPLAS researchers and showcase the beauty and ease of data sharing to spike fruitful collaborations with peers.
+Research is a highly collaborative endeavor that builds on the synergistic interaction between different stakeholders enabled by efficient knowledge exchange. Gaining a prompt overview of the ongoing research efforts &ndash; both pre- and post-publication &ndash; is oftentimes hindered for social, legal or technical reasons. This often holds true even between parties of spatially closest and well trusted surroundings of a collaborative consortium such as the Cluster of Excellence on Plant Sciences (CEPLAS[^CEPLAS]). The key to enable discussion on and exchange of research data is *findability*, the first layer of the FAIR principles[^go-fair] of data stewardship (Wilkinson *et al.*, 2016[^wilkinson2016]). The project presented here aims to address this layer, by making CEPLAS research easily findable and visible amongst CEPLAS researchers and showcase the beauty and ease of data sharing to spike fruitful collaborations with peers.
 
-## State of the art
+## DataPLANT and the Annotated Research Context
 
-Research data management within CEPLAS is closely aligned with DataPLANT[^DataPLANT], the NFDI consortium for plant sciences. DataPLANT has developed the Annotated Research Context (ARC[^ARC]), a directory structure for research objects. Annotation of research data in the ARC is based on the metadata schema ISA[^ISA] (for investigation &ndash; study &ndash; assay). Serialized in spread sheet format as *ISA-tab* this allows intuitive, flexible and yet structured and conclusive metadata annotation of the versatile data types produced in plant sciences. ARCs are git[^git] repositories that can be shared via DataPLANT's DataHUB[^DataHUB], a customized GitLab[^GitLab] instance with a federated authentication interface to allow controlled access across institute borders.
-Although the ARC environment is continuously being developed, the choice of these key technical pillars are set: (a) ARC as the structure, (b) ISA as the metadata language, (c) git as version control logic and (d) gitlab for ARC collaboration and user management. This allows to leverage the ARC and develop at least intermediate solutions for data findability, knowing that time and efforts are well-invested, since both (meta)data inputs in as well as secondary outputs dependent on the ARC will be adoptable and migratable in the future.
+Research data management (RDM) within CEPLAS is closely aligned with DataPLANT[^DataPLANT], the NFDI[^NFDI] consortium for plant sciences. At the heart of DataPLANT's RDM strategy lies the Annotated Research Context (ARC[^ARC]), a directory structure that packages research data together with associated metadata and computational workflows into self-sustained research objects. Annotation of research data in the ARC is based on the metadata schema ISA[^ISA] (for investigation &ndash; study &ndash; assay). Serialized in spread sheet format as *ISA-tab* this enables intuitive, flexible and yet structured and conclusive metadata annotation of the versatile data types produced in plant sciences. ARCs are git[^git] repositories that can be shared via DataPLANT's DataHUB[^DataHUB], a customized GitLab[^GitLab] instance with a federated authentication interface to allow controlled access across institute borders.  
+Although the ARC environment is continuously being developed, the choice of these key technical pillars are set: (a) ARC as the structure, (b) ISA as the metadata language, (c) git as version control logic and (d) gitlab for ARC collaboration and user management. This allows to leverage the ARC environment and develop (intermediate) solutions for data findability, knowing that time and efforts are well-invested, since both (meta)data ingest into as well as secondary outputs dependent on the ARC will be adoptable and migratable in the future.  
+While (contents of the) ARCs can be searched via standard GitLab-implemented mechanisms within the DataHUB or via standard routines on a user's system where the ARCs are locally cloned and stored, a structured and user-friendly search interface tailored to metadata stored in multiple ARCs is currently unavailable. With the ARC-Finder presented here, I seek to close this gap.
 
 # Approach
+
+## The ARC-Finder workflow
+
+The ARC-Finder employs three concerted, but independent modules of metadata retrieval, restructure, and representation (Fig. 1).
+
+![ARC-Finder Workflow. Depending wether the user provided a gitlab personal access token (PAT). the ARC-Finder retrieves publicly (1a) or publicly and privately (1b) accessible metadata from the DataHUB and stores it in a local data dump. The metadata is re-structured into a searchable database (2) and fed into the ARC-Finder GUI (3, details see Fig. 2) as well as provided as an SQLite database (DB) (4).](slides/2022-06-10_arcFinder_slides_brilhaus/2022-06-10_arcFinder_slides_brilhaus.001.png)
+
+
+Depending on user-choice and gitlab personal access token (PAT) either publicly available (1a) or public plus privately shared (1b) ARCs are read and stored in a local data dump (see also user instructions in [README.md](#readmemd)).
+
+From the ISA investigation workbooks (`isa.investigation.xlsx`) stored at the roots of every ARC. The CEPLAS-ARC-Finder selectively retrieves, downloads and dumps the metadata locally on the user's machine. The CEPLAS-ARC-Finder then restructures the metadata into a simple spreadsheet-based database. From the database the investigation data is finally read and represented by a user interface that enables finding the data available to the individual user.
+
+## The ARC-Finder GUI
+
+![ARC-Finder GUI.](slides/2022-06-10_arcFinder_slides_brilhaus/2022-06-10_arcFinder_slides_brilhaus.002.png)
+
+## SQLite database as alternative output
+
+## Data safety
+
+This project focuses on metadata at the highest project and least sensitive (i.e. ISA's "investigation") level to minimize user input or possible discomfort with data sharing
+- outsourced to DataHUB
+
+Here, access to the ARCs can be controlled to share them publicly or with invited collaborators. 
 
 ## Technical back-end
 
 The technical back-end of the ARC-Finder is a combination of shell and R scripts and leveraging on the GitLab API (version 4). The idea was to rely on as few code environments as possible. The actual code work is attached in the supplemental materials (see [scripts](#scripts)) and available online (see [availability](#availability)). Software dependencies are listed in the supplemental materials (see [dependencies](#dependencies)).
-
-## Data safety
-
-This project focuses on metadata at the highest project and least sensitive (i.e. ISA's "investigation") level to minimize user input or possible discomfort with data sharing and will be achieved in four concerted, but independent modules of metadata
-
-1. collection,
-1. retrieval,
-1. restructure, and
-1. representation.
-
-First, metadata is collected &ndash; manually or supported by automation &ndash; in the ISA investigation spread sheet, packaged in ARCs and submitted to the DataHUB by individual volunteers. Here, access to the ARCs can be controlled to share them publicly or with invited collaborators. The CEPLAS-ARC-Finder selectively retrieves, downloads and dumps the metadata locally on the user's machine. The CEPLAS-ARC-Finder then restructures the metadata into a simple spreadsheet-based database. From the database the investigation data is finally read and represented by a user interface that enables finding the data available to the individual user.
-
-![ARC-Finder Workflow. First, the ARC-Finder retrieves accessible data from the DataHUB (1). Depending on user-choice and provided access token either publicly available (1a) or public plus privately shared (1b) ARCs are read and stored in a local data dump.](slides/2022-06-10_arcFinder_slides_brilhaus/2022-06-10_arcFinder_slides_brilhaus.001.png)
-
-![ARC-Finder GUI.](slides/2022-06-10_arcFinder_slides_brilhaus/2022-06-10_arcFinder_slides_brilhaus.002.png)
 
 # Discussion
 
@@ -153,7 +142,7 @@ TeX Live 2022 & MacTeX-2022 & -\tabularnewline
 
 ### R libraries
 
-To provide best reproducibility, R package dependencies are handled via the `renv`[^renv] (version 0.15.3) and stored in the root file "renv.lock". In the first step of `arcFinder`, the virtual environment is automatically restored, including installation of all required dependencies. Depending on the local setup (installation of R and packages), this may take some time. However, `renv` prevents interference with the local setup, thus keeping the system intact.
+To provide best reproducibility, R package dependencies are handled via `renv`[^renv] (version 0.15.3) and stored in the root file "renv.lock". In the first step of `arcFinder`, the virtual environment is automatically restored, including installation of all required dependencies. Depending on the local setup (installation of R and packages), this may take some time. However, `renv` prevents interference with the local setup, thus keeping the system intact.
 
 \begin{longtable}[]{llllllll}
 \caption[]{R packages specifically loaded for individual R scripts} \\
@@ -187,6 +176,9 @@ As this workflow (a) targets a completely other "side" of the ARC and DataHUB en
 
 <!-- Footnotes -->
 
+[^NFDI]: Nationale Forschungsdaten Infrastruktur, https://www.nfdi.de/
+[^wilkinson2016]: Wilkinson, M., Dumontier, M., Aalbersberg, I. et al. The FAIR Guiding Principles for scientific data management and stewardship. Sci Data 3, 160018 (2016). https://doi.org/10.1038/sdata.2016.18
+[^go-fair]: GO-FAIR, https://www.go-fair.org/fair-principles/
 [^CEPLAS]: CEPLAS, <https://ceplas.eu>
 [^DataPLANT]: DataPLANT, <https://nfdi4plants.de> 
 [^dpregister]: DataPLANT registration, <https://register.nfdi4plants.org/>
@@ -198,6 +190,8 @@ As this workflow (a) targets a completely other "side" of the ARC and DataHUB en
 [^renv]: R package "renv", <https://rstudio.github.io/renv/>
 
 <!-- Footnotes -->
+
+\pagebreak
 
 # Scripts
 
@@ -312,6 +306,52 @@ echo "### Close the browser window or tab to shut down the app."
 
 Rscript -e 'load(".tmp/03_allARCs.RData"); shiny::runApp("./scripts/04_searchApp/app.R", launch.browser = TRUE)' 2>&1 >> .tmp/04.log
 ```
+\pagebreak
+
+## README.md
+
+
+### ARC-Finder &ndash; A simple, locally-deployed tool to find your peer's research data
+
+This is a tool to help you find metadata about ARCs stored in the DataPLANT [DataHUB](https://git.nfdi4plants.org/).
+Visit the [DataPLANT website](<https://nfdi4plants.de>) for more information about ARCs (annotated research contexts).
+
+#### Usage
+
+- Git clone or download this repository.
+- Open a command line or terminal and navigate to the `arcFinder` directory.
+- Run one of the following two options:
+
+##### Option 1: Search public ARCs only
+
+```bash
+./arcFinder.sh
+```
+
+##### Option 2: Search Public + privately shared ARCs
+
+> Note: Replace `<gitlab pat>` with the path pointing to a file which stores a GitLab personal access token (PAT).
+
+```bash
+./arcFinder.sh -p <gitlab pat>
+```
+
+##### Registration with DataPLANT
+
+In order to use the `<gitlab pat>` option, please follow these steps:
+
+1. [Sign up](<https://register.nfdi4plants.org/>) with DataPLANT.
+2. Generate a personal access token in the [DataHUB PAT settings](https://git.nfdi4plants.org/-/profile/personal_access_tokens)
+   - Provide a "Token name", e.g. `arcFinder`
+   - Select either option "api" or "read_api" and click "Create personal access token"
+   - Copy the generated token on top of the page.
+3. Paste the bare token into a text file and save it (e.g. `gitlab_token` stored in the root of this directory)
+4. Supply the file path to `arcFinder`, e.g.:
+
+```bash
+./arcFinder.sh -p gitlab_token
+```
+\pagebreak
 
 ## scripts/01_install_dependencies.R
 
