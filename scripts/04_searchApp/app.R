@@ -1,4 +1,6 @@
-
+############################################################
+### The ARC-Finder GUI Shiny App
+############################################################
 
 suppressMessages(library(tidyverse))
 suppressMessages(library(shiny))
