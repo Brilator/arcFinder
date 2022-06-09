@@ -42,7 +42,7 @@ In order to use the `<gitlab pat>` option, please follow these steps:
 
 ## Documentation
 
-- Read the [full project outline](docs/2022-06-10_arcFinder_project_brilhaus.pdf) for more details.
+- Read the [full project outline](docs/2022-06-10_arcFinder_project_brilhaus.pdf) or view the [slides](docs/2022-06-10_arcFinder_slides_brilhaus.pdf) for context and more details.
 - Check out the [gif](https://github.com/Brilator/arcFinder/blob/main/docs/arcFinder_gif.md) to see the ARC-Finder in action
 
 ## License
