@@ -7,6 +7,7 @@ subtitle: "Projektmodul (Modul 9) des Zertifikatskurs FDM (15.07) 2021 / 2022"
 lang: "en"
 toc: true
 toc-own-page: true
+footer-right: "CC-BY 4.0"
 titlepage: true
 titlepage-color: "2D3E50"
 titlepage-text-color: "FFC000"
