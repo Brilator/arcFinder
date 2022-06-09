@@ -2,7 +2,7 @@
 # ARC-Finder &ndash; A simple, locally-deployed tool to find your peer's research data
 
 This is a tool to help you find metadata about ARCs stored in the DataPLANT [DataHUB](https://git.nfdi4plants.org/).
-Visit the [DataPLANT website](<https://nfdi4plants.de>) for more information about ARCs (annotated research contexts).
+Visit the [DataPLANT website](<https://nfdi4plants.org>) for more information about ARCs (annotated research contexts).
 
 ## Usage
 
