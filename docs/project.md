@@ -145,7 +145,7 @@ As this workflow (a) targets a completely other "side" of the ARC and DataHUB en
 [^wilkinson2016]: Wilkinson, M., Dumontier, M., Aalbersberg, I. et al. The FAIR Guiding Principles for scientific data management and stewardship. Sci Data 3, 160018 (2016). <https://doi.org/10.1038/sdata.2016.18>
 [^go-fair]: GO-FAIR, <https://www.go-fair.org/fair-principles/>
 [^CEPLAS]: CEPLAS, <https://ceplas.eu>
-[^DataPLANT]: DataPLANT, <https://nfdi4plants.de>
+[^DataPLANT]: DataPLANT, <https://nfdi4plants.org>
 [^shiny]: ShinyApps, <https://www.shinyapps.io/>
 [^gitlab_api]: GitLab Application Programming Interface (API), <https://docs.gitlab.com/ee/api/>
 [^dpregister]: DataPLANT registration, <https://register.nfdi4plants.org/>
