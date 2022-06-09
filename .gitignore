@@ -385,9 +385,7 @@ Temporary Items
 gitlab_token
 .Rhistory
 *.RData
-.arcs*
 .tmp*
-05_final_pipeline/05_allARCs_database.sqlite
 .vscode/settings.json
 yourARCs_database.sqlite
 docs/tmp_readme
